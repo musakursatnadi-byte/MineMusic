@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Ganti nama daftar",
   "minemusic.lists.name_label": "Nama daftar:",
   "minemusic.lists.delete_title": "Hapus daftar putar ini?",
-  "minemusic.lists.delete_message": "\"%s\" dan semua lagunya akan dihapus."
+  "minemusic.lists.delete_message": "\"%s\" dan semua lagunya akan dihapus.",
+  "minemusic.search.title": "Hasil pencarian",
+  "minemusic.search.query": "Hasil YouTube untuk: %s",
+  "minemusic.search.searching": "Mencari di YouTube...",
+  "minemusic.search.none": "Tidak ada yang ditemukan. Coba kata lain.",
+  "minemusic.search.hint": "▶ memutar lagu, + menambahkannya ke daftar",
+  "minemusic.search.add_tooltip": "Tambahkan ke daftar putar"
 }

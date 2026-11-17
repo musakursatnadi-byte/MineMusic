@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "प्लेलिस्ट का नाम बदलें",
   "minemusic.lists.name_label": "प्लेलिस्ट का नाम:",
   "minemusic.lists.delete_title": "यह प्लेलिस्ट हटाएँ?",
-  "minemusic.lists.delete_message": "\"%s\" और उसके सभी गाने हटा दिए जाएँगे।"
+  "minemusic.lists.delete_message": "\"%s\" और उसके सभी गाने हटा दिए जाएँगे।",
+  "minemusic.search.title": "खोज परिणाम",
+  "minemusic.search.query": "YouTube परिणाम: %s",
+  "minemusic.search.searching": "YouTube पर खोज रहे हैं...",
+  "minemusic.search.none": "कुछ नहीं मिला। दूसरे शब्द आज़माएँ।",
+  "minemusic.search.hint": "▶ गाना चलाता है, + उसे सूची में जोड़ता है",
+  "minemusic.search.add_tooltip": "प्लेलिस्ट में जोड़ें"
 }

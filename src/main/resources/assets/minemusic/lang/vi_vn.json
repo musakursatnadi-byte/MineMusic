@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Đổi tên danh sách",
   "minemusic.lists.name_label": "Tên danh sách:",
   "minemusic.lists.delete_title": "Xóa danh sách phát này?",
-  "minemusic.lists.delete_message": "\"%s\" và tất cả bài hát trong đó sẽ bị xóa."
+  "minemusic.lists.delete_message": "\"%s\" và tất cả bài hát trong đó sẽ bị xóa.",
+  "minemusic.search.title": "Kết quả tìm kiếm",
+  "minemusic.search.query": "Kết quả YouTube cho: %s",
+  "minemusic.search.searching": "Đang tìm trên YouTube...",
+  "minemusic.search.none": "Không tìm thấy gì. Hãy thử từ khác.",
+  "minemusic.search.hint": "▶ phát bài hát, + thêm vào danh sách",
+  "minemusic.search.add_tooltip": "Thêm vào danh sách phát"
 }

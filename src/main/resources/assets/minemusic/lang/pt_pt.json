@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Mudar o nome da lista",
   "minemusic.lists.name_label": "Nome da lista:",
   "minemusic.lists.delete_title": "Apagar esta lista?",
-  "minemusic.lists.delete_message": "\"%s\" e todas as suas músicas serão removidas."
+  "minemusic.lists.delete_message": "\"%s\" e todas as suas músicas serão removidas.",
+  "minemusic.search.title": "Resultados da pesquisa",
+  "minemusic.search.query": "Resultados do YouTube para: %s",
+  "minemusic.search.searching": "A pesquisar no YouTube...",
+  "minemusic.search.none": "Nada encontrado. Experimenta outras palavras.",
+  "minemusic.search.hint": "▶ toca a música, + adiciona-a à lista",
+  "minemusic.search.add_tooltip": "Adicionar à lista de reprodução"
 }

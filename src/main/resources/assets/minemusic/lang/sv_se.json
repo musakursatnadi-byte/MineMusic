@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Byt namn på spellistan",
   "minemusic.lists.name_label": "Spellistans namn:",
   "minemusic.lists.delete_title": "Ta bort den här spellistan?",
-  "minemusic.lists.delete_message": "\"%s\" och alla dess låtar tas bort."
+  "minemusic.lists.delete_message": "\"%s\" och alla dess låtar tas bort.",
+  "minemusic.search.title": "Sökresultat",
+  "minemusic.search.query": "YouTube-resultat för: %s",
+  "minemusic.search.searching": "Söker på YouTube...",
+  "minemusic.search.none": "Inget hittades. Prova andra ord.",
+  "minemusic.search.hint": "▶ spelar en låt, + lägger till den i listan",
+  "minemusic.search.add_tooltip": "Lägg till i spellistan"
 }

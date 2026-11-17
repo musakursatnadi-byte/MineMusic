@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Тізімнің атын өзгерту",
   "minemusic.lists.name_label": "Тізімнің аты:",
   "minemusic.lists.delete_title": "Бұл тізім жойылсын ба?",
-  "minemusic.lists.delete_message": "\"%s\" және ішіндегі барлық әндер жойылады."
+  "minemusic.lists.delete_message": "\"%s\" және ішіндегі барлық әндер жойылады.",
+  "minemusic.search.title": "Іздеу нәтижелері",
+  "minemusic.search.query": "YouTube нәтижелері: %s",
+  "minemusic.search.searching": "YouTube-тан іздеу...",
+  "minemusic.search.none": "Ештеңе табылмады. Басқа сөздерді байқап көр.",
+  "minemusic.search.hint": "▶ әнді ойнатады, + оны тізімге қосады",
+  "minemusic.search.add_tooltip": "Ойнату тізіміне қосу"
 }

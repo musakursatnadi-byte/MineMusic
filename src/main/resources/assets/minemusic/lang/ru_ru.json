@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Переименовать плейлист",
   "minemusic.lists.name_label": "Название плейлиста:",
   "minemusic.lists.delete_title": "Удалить этот плейлист?",
-  "minemusic.lists.delete_message": "«%s» и все его песни будут удалены."
+  "minemusic.lists.delete_message": "«%s» и все его песни будут удалены.",
+  "minemusic.search.title": "Результаты поиска",
+  "minemusic.search.query": "Результаты YouTube для: %s",
+  "minemusic.search.searching": "Поиск на YouTube...",
+  "minemusic.search.none": "Ничего не найдено. Попробуй другие слова.",
+  "minemusic.search.hint": "▶ включает песню, + добавляет её в плейлист",
+  "minemusic.search.add_tooltip": "Добавить в плейлист"
 }

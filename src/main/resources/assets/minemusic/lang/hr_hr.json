@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Preimenuj popis",
   "minemusic.lists.name_label": "Naziv popisa:",
   "minemusic.lists.delete_title": "Obrisati ovaj popis?",
-  "minemusic.lists.delete_message": "\"%s\" i sve pjesme u njemu bit će obrisane."
+  "minemusic.lists.delete_message": "\"%s\" i sve pjesme u njemu bit će obrisane.",
+  "minemusic.search.title": "Rezultati pretrage",
+  "minemusic.search.query": "YouTube rezultati za: %s",
+  "minemusic.search.searching": "Tražim na YouTubeu...",
+  "minemusic.search.none": "Ništa nije pronađeno. Pokušaj s drugim riječima.",
+  "minemusic.search.hint": "▶ pušta pjesmu, + je dodaje na popis",
+  "minemusic.search.add_tooltip": "Dodaj na popis za reprodukciju"
 }

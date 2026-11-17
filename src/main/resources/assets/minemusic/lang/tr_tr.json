@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Listenin adını değiştir",
   "minemusic.lists.name_label": "Listenin adı:",
   "minemusic.lists.delete_title": "Bu liste silinsin mi?",
-  "minemusic.lists.delete_message": "\"%s\" ve içindeki bütün şarkılar silinecek."
+  "minemusic.lists.delete_message": "\"%s\" ve içindeki bütün şarkılar silinecek.",
+  "minemusic.search.title": "Arama sonuçları",
+  "minemusic.search.query": "YouTube sonuçları: %s",
+  "minemusic.search.searching": "YouTube'da aranıyor...",
+  "minemusic.search.none": "Hiçbir şey bulunamadı. Başka kelimeler dene.",
+  "minemusic.search.hint": "▶ şarkıyı çalar, + listeye ekler",
+  "minemusic.search.add_tooltip": "Çalma listesine ekle"
 }

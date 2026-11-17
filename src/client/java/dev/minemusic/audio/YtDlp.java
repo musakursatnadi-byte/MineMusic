@@ -14,11 +14,15 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-/** Runs yt-dlp to download the audio of one video (or the first search result) into the cache. */
+/** Runs yt-dlp: finds songs on YouTube and downloads the audio of one of them into the cache. */
 final class YtDlp {
     private static final long CACHE_LIMIT_BYTES = 500L * 1024 * 1024;
 
     record Track(String title, Path file, int durationSeconds) {
+    }
+
+    /** One search result: the YouTube video id, its title and its length (0 when unknown). */
+    record Found(String id, String title, int durationSeconds) {
     }
 
     private YtDlp() {
@@ -125,17 +129,60 @@ final class YtDlp {
         }
     }
 
+    /**
+     * The first {@code count} YouTube results for a song name, without downloading anything.
+     * "--flat-playlist" reads only the search page, so it takes about two seconds.
+     */
+    static List<Found> search(String query, int count, ProcessTracker tracker) throws IOException, InterruptedException {
+        List<String> cmd = new ArrayList<>(List.of(
+                Tools.ytDlp(),
+                "--ignore-config",
+                "--flat-playlist",
+                // The title goes last, so a "|" inside it does not matter.
+                "--print", "MMRES %(id)s|%(duration|)s|%(title)s"));
+        addJsRuntime(cmd);
+        cmd.add("ytsearch" + count + ":" + query);
+        List<Found> found = new ArrayList<>();
+        String error = null;
+        Process process = tracker.start(cmd);
+        try (BufferedReader out = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = out.readLine()) != null) {
+                if (line.startsWith("MMRES ")) {
+                    String[] parts = line.substring(6).split("\\|", 3);
+                    if (parts.length == 3 && !parts[0].isBlank()) {
+                        found.add(new Found(parts[0].trim(), parts[2].trim(), parseDuration(parts[1])));
+                    }
+                } else if (line.startsWith("ERROR:")) {
+                    error = line.substring(6).trim();
+                }
+            }
+            int exit = process.waitFor();
+            if (exit != 0 && found.isEmpty()) {
+                throw new MusicException(error != null ? Message.raw(error) : new Message("minemusic.error.ytdlp_failed", Integer.toString(exit)));
+            }
+        } finally {
+            tracker.finish(process);
+        }
+        return found;
+    }
+
     private static List<String> baseCommand() {
         List<String> cmd = new ArrayList<>(List.of(
                 Tools.ytDlp(),
                 "--ignore-config",
                 "--no-playlist",
                 "--playlist-items", "1"));
+        addJsRuntime(cmd);
+        return cmd;
+    }
+
+    /** yt-dlp needs a JavaScript program (deno) to read YouTube; on Windows it is our own copy. */
+    private static void addJsRuntime(List<String> cmd) {
         if (Tools.ytDlp().endsWith(".exe")) {
             cmd.add("--js-runtimes");
             cmd.add("deno:" + Tools.deno());
         }
-        return cmd;
     }
 
     /** Anything that is not a link is treated as a YouTube search, so typing a song name works too. */

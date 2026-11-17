@@ -6,8 +6,11 @@ import dev.minemusic.compat.Compat;
 import dev.minemusic.screen.ListNameScreen;
 import dev.minemusic.screen.MineMusicScreen;
 import dev.minemusic.screen.PlaylistScreen;
+import dev.minemusic.screen.SearchScreen;
 import dev.minemusic.screen.SettingsScreen;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -58,6 +61,7 @@ public final class SelfTest {
         Runnable test = switch (mode) {
             case "galeri" -> GalleryTest::run;
             case "galeri-listeler" -> GalleryTest::runLists;
+            case "galeri-arama" -> GalleryTest::runSearch;
             default -> SelfTest::run;
         };
         Thread thread = new Thread(test, "MineMusic-selftest");
@@ -107,9 +111,26 @@ public final class SelfTest {
             sleep(1);
             check(!vanillaMusicPlaying(mc), "MineMusic çalarken Minecraft müziği sustu");
 
-            // --- Playlist ---
-            typeAndPress(mc, SONG_1, "minemusic.screen.add");
-            typeAndPress(mc, SONG_2, "minemusic.screen.add");
+            // --- A song name shows the first YouTube results; ▶ plays the one picked ---
+            typeAndPress(mc, SONG_1, "minemusic.screen.play");
+            check(onMainGet(() -> TestCompat.screen(mc) instanceof SearchScreen), "Şarkı adıyla 'Çal' arama sonuçlarını açtı");
+            List<Button> results = waitForResults(mc);
+            log("  sonuçlar: " + results.stream().map(b -> b.getMessage().getString()).toList());
+            check(results.size() >= 3 && results.get(0).getMessage().getString().contains("Sweden"),
+                    "Arama " + results.size() + " sonuç buldu, ilki: " + results.get(0).getMessage().getString());
+            shot(mc, "2a-arama-sonuclari");
+            Button second = results.get(1);
+            String secondLabel = second.getMessage().getString();
+            onMain(() -> second.onPress(ENTER));
+            waitPlaying(mc, "Seçilen 2. sonuç çalmaya başladı");
+            String picked = player.getTitle();
+            check(secondLabel.startsWith("▶ " + picked.substring(0, Math.min(15, picked.length())))
+                            && onMainGet(() -> TestCompat.screen(mc) instanceof MineMusicScreen),
+                    "Seçilen şarkı çalıyor (" + picked + ") ve MineMusic ekranına dönüldü");
+
+            // --- Playlist: "+ Add to list" with a song name shows the results too ---
+            addFromSearch(mc, SONG_1);
+            addFromSearch(mc, SONG_2);
             check(player.getPlaylist().size() == 2, "İki şarkı listeye eklendi (liste: " + player.getPlaylist().size() + ")");
             waitFor("şarkı adları bulundu", () -> player.getPlaylist().stream().noneMatch(e -> e.title().equals(e.input())), 60);
             log("  liste: " + player.getPlaylist().stream().map(e -> e.title()).toList());
@@ -309,6 +330,44 @@ public final class SelfTest {
             throw new IllegalStateException("'" + key + "' butonu bulunamadı");
         }
         onMain(() -> button.onPress(ENTER));
+    }
+
+    /** In the search results: "+" next to the first result adds it, and the "+" turns into a tick. */
+    private static void addFromSearch(Minecraft mc, String song) throws Exception {
+        typeAndPress(mc, song, "minemusic.screen.add");
+        List<Button> results = waitForResults(mc);
+        Button plus = onMainGet(() -> findLiteral(TestCompat.screen(mc), "+"));
+        onMain(() -> plus.onPress(ENTER));
+        sleep(1);
+        Button tick = onMainGet(() -> findLiteral(TestCompat.screen(mc), "✔"));
+        check(!tick.active, "'+' ile listeye eklendi: " + results.get(0).getMessage().getString());
+        press(mc, "gui.back");
+        sleep(1);
+    }
+
+    /** Waits for the search results screen to fill and returns its "▶ ..." buttons. */
+    static List<Button> waitForResults(Minecraft mc) throws Exception {
+        waitFor("arama sonuçları geldi", () -> !resultButtons(mc).isEmpty(), 120);
+        return resultButtons(mc);
+    }
+
+    private static List<Button> resultButtons(Minecraft mc) {
+        try {
+            return onMainGet(() -> {
+                List<Button> found = new ArrayList<>();
+                Screen screen = TestCompat.screen(mc);
+                if (screen instanceof SearchScreen) {
+                    for (GuiEventListener child : screen.children()) {
+                        if (child instanceof Button button && button.getMessage().getString().startsWith("▶ ")) {
+                            found.add(button);
+                        }
+                    }
+                }
+                return found;
+            });
+        } catch (Exception e) {
+            return List.of();
+        }
     }
 
     static Button findLiteral(Screen screen, String text) {

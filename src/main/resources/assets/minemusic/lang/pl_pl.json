@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Zmień nazwę playlisty",
   "minemusic.lists.name_label": "Nazwa playlisty:",
   "minemusic.lists.delete_title": "Usunąć tę playlistę?",
-  "minemusic.lists.delete_message": "\"%s\" i wszystkie jej piosenki zostaną usunięte."
+  "minemusic.lists.delete_message": "\"%s\" i wszystkie jej piosenki zostaną usunięte.",
+  "minemusic.search.title": "Wyniki wyszukiwania",
+  "minemusic.search.query": "Wyniki z YouTube dla: %s",
+  "minemusic.search.searching": "Szukam na YouTube...",
+  "minemusic.search.none": "Nic nie znaleziono. Spróbuj innych słów.",
+  "minemusic.search.hint": "▶ odtwarza utwór, + dodaje go do playlisty",
+  "minemusic.search.add_tooltip": "Dodaj do playlisty"
 }

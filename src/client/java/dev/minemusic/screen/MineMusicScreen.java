@@ -58,7 +58,7 @@ public final class MineMusicScreen extends Screen {
         body.addChild(linkBox);
 
         LinearLayout controls = body.addChild(LinearLayout.horizontal().spacing(4));
-        controls.addChild(button("minemusic.screen.play", 100, b -> player.play(linkBox.getValue())));
+        controls.addChild(button("minemusic.screen.play", 100, b -> play()));
         pauseButton = controls.addChild(Button.builder(pauseLabel(), b -> player.togglePause()).width(100).build());
         controls.addChild(button("minemusic.screen.stop", 100, b -> player.stop()));
 
@@ -103,8 +103,23 @@ public final class MineMusicScreen extends Screen {
         Compat.setScreen(minecraft, parent);
     }
 
+    /** A link plays at once; a song name opens the search results to pick the right song from. */
+    private void play() {
+        String input = linkBox.getValue().trim();
+        if (input.isEmpty() || MusicPlayer.isLink(input)) {
+            player.play(input);
+        } else {
+            Compat.setScreen(minecraft, new SearchScreen(this, input));
+        }
+    }
+
     private void addToPlaylist() {
         String input = linkBox.getValue().trim();
+        if (!input.isEmpty() && !MusicPlayer.isLink(input)) {
+            // The results screen has a "+" next to every song.
+            Compat.setScreen(minecraft, new SearchScreen(this, input));
+            return;
+        }
         if (player.addToPlaylist(input)) {
             flash = Component.translatable("minemusic.screen.added", input).withStyle(ChatFormatting.AQUA);
         } else {

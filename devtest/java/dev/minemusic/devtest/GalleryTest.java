@@ -54,15 +54,20 @@ final class GalleryTest {
     }
 
     static void run() {
-        run(false);
+        run("");
     }
 
     /** Only the pictures of the playlists (-Pselftestmode=galeri-listeler). */
     static void runLists() {
-        run(true);
+        run("lists");
     }
 
-    private static void run(boolean listsOnly) {
+    /** Only the pictures of the search results (-Pselftestmode=galeri-arama). */
+    static void runSearch() {
+        run("search");
+    }
+
+    private static void run(String only) {
         Minecraft mc = Minecraft.getInstance();
         MusicPlayer player = MusicPlayer.get();
         Path[] userFiles = {Tools.home().resolve("ayarlar.properties")};
@@ -110,8 +115,12 @@ final class GalleryTest {
             onMain(() -> Compat.setScreen(mc, new PlaylistScreen(new MineMusicScreen(null))));
             sleep(3);
             gallery(mc, "03-playlist");
-            if (listsOnly) {
+            if (only.equals("lists")) {
                 shootLists(mc, player);
+                return;
+            }
+            if (only.equals("search")) {
+                shootSearch(mc);
                 return;
             }
 
@@ -286,6 +295,42 @@ final class GalleryTest {
         onMain(() -> Compat.setScreen(mc, null));
         onMain(() -> player.deleteList(mining));
         onMain(() -> player.deleteList(fight));
+    }
+
+    /** The YouTube results for a song name, then one of them added with "+". */
+    private static void shootSearch(Minecraft mc) throws Exception {
+        onMain(() -> Compat.setScreen(mc, new MineMusicScreen(null)));
+        sleep(1);
+        onMain(() -> find(TestCompat.screen(mc), EditBox.class).setValue("C418 Sweden"));
+        SelfTest.press(mc, "minemusic.screen.play");
+        SelfTest.waitForResults(mc);
+        sleep(2);
+        parkMouse(mc);
+        gallery(mc, "16-search-results");
+        Button plus = onMainGet(() -> SelfTest.findLiteral(TestCompat.screen(mc), "+"));
+        onMain(() -> plus.onPress(SelfTest.ENTER));
+        parkMouse(mc);
+        gallery(mc, "17-search-added");
+        onMain(() -> Compat.setScreen(mc, null));
+    }
+
+    /**
+     * Moves the game's idea of the mouse to the top-left corner, so no button is hovered and no
+     * tooltip covers the picture (the real cursor stays where it is until someone moves it).
+     */
+    private static void parkMouse(Minecraft mc) throws Exception {
+        onMain(() -> {
+            for (String name : new String[]{"xpos", "ypos"}) {
+                try {
+                    Field field = mc.mouseHandler.getClass().getDeclaredField(name);
+                    field.setAccessible(true);
+                    field.setDouble(mc.mouseHandler, 0);
+                } catch (ReflectiveOperationException e) {
+                    log("  (fare köşeye alınamadı: " + name + ")");
+                }
+            }
+        });
+        sleep(1);
     }
 
     private static void playSong(Minecraft mc, String song) throws Exception {

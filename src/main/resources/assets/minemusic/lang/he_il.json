@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "שינוי שם הרשימה",
   "minemusic.lists.name_label": "שם הרשימה:",
   "minemusic.lists.delete_title": "למחוק את רשימת ההשמעה הזו?",
-  "minemusic.lists.delete_message": "\"%s\" וכל השירים שבה יימחקו."
+  "minemusic.lists.delete_message": "\"%s\" וכל השירים שבה יימחקו.",
+  "minemusic.search.title": "תוצאות חיפוש",
+  "minemusic.search.query": "תוצאות YouTube עבור: %s",
+  "minemusic.search.searching": "מחפש ב-YouTube...",
+  "minemusic.search.none": "לא נמצא כלום. נסה מילים אחרות.",
+  "minemusic.search.hint": "▶ מנגן שיר, + מוסיף אותו לרשימה",
+  "minemusic.search.add_tooltip": "הוסף לרשימת ההשמעה"
 }

@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Lista átnevezése",
   "minemusic.lists.name_label": "A lista neve:",
   "minemusic.lists.delete_title": "Törlöd ezt a listát?",
-  "minemusic.lists.delete_message": "A(z) \"%s\" lista és minden dala törlődik."
+  "minemusic.lists.delete_message": "A(z) \"%s\" lista és minden dala törlődik.",
+  "minemusic.search.title": "Keresési eredmények",
+  "minemusic.search.query": "YouTube-találatok erre: %s",
+  "minemusic.search.searching": "Keresés a YouTube-on...",
+  "minemusic.search.none": "Nincs találat. Próbálj más szavakat.",
+  "minemusic.search.hint": "▶ lejátssza a dalt, + hozzáadja a listához",
+  "minemusic.search.add_tooltip": "Hozzáadás a lejátszási listához"
 }

@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "プレイリストの名前を変更",
   "minemusic.lists.name_label": "プレイリスト名:",
   "minemusic.lists.delete_title": "このプレイリストを削除しますか?",
-  "minemusic.lists.delete_message": "「%s」とその中のすべての曲が削除されます。"
+  "minemusic.lists.delete_message": "「%s」とその中のすべての曲が削除されます。",
+  "minemusic.search.title": "検索結果",
+  "minemusic.search.query": "YouTube の検索結果: %s",
+  "minemusic.search.searching": "YouTube で検索中...",
+  "minemusic.search.none": "見つかりませんでした。別の言葉で試してください。",
+  "minemusic.search.hint": "▶ で再生、+ でプレイリストに追加",
+  "minemusic.search.add_tooltip": "プレイリストに追加"
 }

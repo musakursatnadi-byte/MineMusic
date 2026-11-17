@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "重新命名播放清單",
   "minemusic.lists.name_label": "播放清單名稱:",
   "minemusic.lists.delete_title": "刪除這個播放清單?",
-  "minemusic.lists.delete_message": "「%s」和其中的所有歌曲都將被刪除。"
+  "minemusic.lists.delete_message": "「%s」和其中的所有歌曲都將被刪除。",
+  "minemusic.search.title": "搜尋結果",
+  "minemusic.search.query": "YouTube 搜尋結果：%s",
+  "minemusic.search.searching": "正在 YouTube 上搜尋...",
+  "minemusic.search.none": "什麼也沒找到。換個詞試試。",
+  "minemusic.search.hint": "▶ 播放歌曲，+ 加入播放清單",
+  "minemusic.search.add_tooltip": "加入播放清單"
 }

@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Gi spillelisten nytt navn",
   "minemusic.lists.name_label": "Navn på spillelisten:",
   "minemusic.lists.delete_title": "Slette denne spillelisten?",
-  "minemusic.lists.delete_message": "\"%s\" og alle sangene i den blir fjernet."
+  "minemusic.lists.delete_message": "\"%s\" og alle sangene i den blir fjernet.",
+  "minemusic.search.title": "Søkeresultater",
+  "minemusic.search.query": "YouTube-resultater for: %s",
+  "minemusic.search.searching": "Søker på YouTube...",
+  "minemusic.search.none": "Fant ingenting. Prøv andre ord.",
+  "minemusic.search.hint": "▶ spiller en sang, + legger den til i listen",
+  "minemusic.search.add_tooltip": "Legg til i spillelisten"
 }

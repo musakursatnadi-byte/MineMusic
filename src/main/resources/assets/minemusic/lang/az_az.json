@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Pleylistin adını dəyiş",
   "minemusic.lists.name_label": "Pleylistin adı:",
   "minemusic.lists.delete_title": "Bu pleylist silinsin?",
-  "minemusic.lists.delete_message": "\"%s\" və içindəki bütün mahnılar silinəcək."
+  "minemusic.lists.delete_message": "\"%s\" və içindəki bütün mahnılar silinəcək.",
+  "minemusic.search.title": "Axtarış nəticələri",
+  "minemusic.search.query": "YouTube nəticələri: %s",
+  "minemusic.search.searching": "YouTube-da axtarılır...",
+  "minemusic.search.none": "Heç nə tapılmadı. Başqa sözlər yoxla.",
+  "minemusic.search.hint": "▶ mahnını çalır, + siyahıya əlavə edir",
+  "minemusic.search.add_tooltip": "Çalğı siyahısına əlavə et"
 }

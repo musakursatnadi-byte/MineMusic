@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "เปลี่ยนชื่อเพลย์ลิสต์",
   "minemusic.lists.name_label": "ชื่อเพลย์ลิสต์:",
   "minemusic.lists.delete_title": "ลบเพลย์ลิสต์นี้ไหม?",
-  "minemusic.lists.delete_message": "\"%s\" และเพลงทั้งหมดในนั้นจะถูกลบ"
+  "minemusic.lists.delete_message": "\"%s\" และเพลงทั้งหมดในนั้นจะถูกลบ",
+  "minemusic.search.title": "ผลการค้นหา",
+  "minemusic.search.query": "ผลการค้นหา YouTube สำหรับ: %s",
+  "minemusic.search.searching": "กำลังค้นหาใน YouTube...",
+  "minemusic.search.none": "ไม่พบอะไรเลย ลองใช้คำอื่น",
+  "minemusic.search.hint": "▶ เล่นเพลง, + เพิ่มลงในเพลย์ลิสต์",
+  "minemusic.search.add_tooltip": "เพิ่มลงในเพลย์ลิสต์"
 }

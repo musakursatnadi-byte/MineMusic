@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Μετονομασία λίστας",
   "minemusic.lists.name_label": "Όνομα λίστας:",
   "minemusic.lists.delete_title": "Διαγραφή αυτής της λίστας;",
-  "minemusic.lists.delete_message": "Η \"%s\" και όλα τα τραγούδια της θα διαγραφούν."
+  "minemusic.lists.delete_message": "Η \"%s\" και όλα τα τραγούδια της θα διαγραφούν.",
+  "minemusic.search.title": "Αποτελέσματα αναζήτησης",
+  "minemusic.search.query": "Αποτελέσματα YouTube για: %s",
+  "minemusic.search.searching": "Αναζήτηση στο YouTube...",
+  "minemusic.search.none": "Δεν βρέθηκε τίποτα. Δοκίμασε άλλες λέξεις.",
+  "minemusic.search.hint": "▶ παίζει το τραγούδι, + το προσθέτει στη λίστα",
+  "minemusic.search.add_tooltip": "Προσθήκη στη λίστα αναπαραγωγής"
 }

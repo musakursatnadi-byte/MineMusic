@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Renombrar lista",
   "minemusic.lists.name_label": "Nombre de la lista:",
   "minemusic.lists.delete_title": "¿Borrar esta lista?",
-  "minemusic.lists.delete_message": "Se borrarán \"%s\" y todas sus canciones."
+  "minemusic.lists.delete_message": "Se borrarán \"%s\" y todas sus canciones.",
+  "minemusic.search.title": "Resultados de búsqueda",
+  "minemusic.search.query": "Resultados de YouTube para: %s",
+  "minemusic.search.searching": "Buscando en YouTube...",
+  "minemusic.search.none": "No se encontró nada. Prueba con otras palabras.",
+  "minemusic.search.hint": "▶ reproduce una canción, + la agrega a la lista",
+  "minemusic.search.add_tooltip": "Agregar a la lista"
 }

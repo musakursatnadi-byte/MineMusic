@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Premenovať playlist",
   "minemusic.lists.name_label": "Názov playlistu:",
   "minemusic.lists.delete_title": "Zmazať tento playlist?",
-  "minemusic.lists.delete_message": "\"%s\" a všetky jeho piesne budú odstránené."
+  "minemusic.lists.delete_message": "\"%s\" a všetky jeho piesne budú odstránené.",
+  "minemusic.search.title": "Výsledky vyhľadávania",
+  "minemusic.search.query": "Výsledky z YouTube pre: %s",
+  "minemusic.search.searching": "Hľadám na YouTube...",
+  "minemusic.search.none": "Nič sa nenašlo. Skús iné slová.",
+  "minemusic.search.hint": "▶ prehrá skladbu, + ju pridá do zoznamu",
+  "minemusic.search.add_tooltip": "Pridať do playlistu"
 }

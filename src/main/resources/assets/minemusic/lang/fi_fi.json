@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Nimeä soittolista uudelleen",
   "minemusic.lists.name_label": "Soittolistan nimi:",
   "minemusic.lists.delete_title": "Poistetaanko tämä soittolista?",
-  "minemusic.lists.delete_message": "\"%s\" ja kaikki sen kappaleet poistetaan."
+  "minemusic.lists.delete_message": "\"%s\" ja kaikki sen kappaleet poistetaan.",
+  "minemusic.search.title": "Hakutulokset",
+  "minemusic.search.query": "YouTube-tulokset haulle: %s",
+  "minemusic.search.searching": "Haetaan YouTubesta...",
+  "minemusic.search.none": "Mitään ei löytynyt. Kokeile muita sanoja.",
+  "minemusic.search.hint": "▶ soittaa kappaleen, + lisää sen soittolistaan",
+  "minemusic.search.add_tooltip": "Lisää soittolistaan"
 }

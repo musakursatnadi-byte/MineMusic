@@ -35,6 +35,48 @@ public final class MusicPlayer {
     private static final int SAMPLE_RATE = 48000;
     private static final int BYTES_PER_FRAME = 4; // 16-bit stereo
     private static final Duration YTDLP_UPDATE_INTERVAL = Duration.ofDays(7);
+    private static final int SEARCH_RESULTS = 5;
+
+    /** One YouTube search result: the link to play and what the results screen shows. */
+    public record SearchResult(String link, String title, int durationSeconds) {
+    }
+
+    /** A search running on its own thread; the results screen looks at it every tick. */
+    public static final class Search {
+        private final String query;
+        private volatile Message status = new Message("minemusic.search.searching");
+        private volatile List<SearchResult> results;
+        private volatile Message error;
+        private volatile boolean cancelled;
+
+        private Search(String query) {
+            this.query = query;
+        }
+
+        public String query() {
+            return query;
+        }
+
+        /** What the search is doing now (downloading the helper programs, searching...). */
+        public Message status() {
+            return status;
+        }
+
+        /** The results, or null while the search is still running. */
+        public List<SearchResult> results() {
+            return results;
+        }
+
+        /** Why the search failed, or null. */
+        public Message error() {
+            return error;
+        }
+
+        /** The screen was closed: whatever comes back is ignored. */
+        public void cancel() {
+            cancelled = true;
+        }
+    }
 
     private final Settings settings = Settings.load();
     private final Playlists lists = Playlists.load();
@@ -75,6 +117,53 @@ public final class MusicPlayer {
 
     public static MusicPlayer get() {
         return INSTANCE;
+    }
+
+    /** A link is played as it is; anything else is a song name to search for. */
+    public static boolean isLink(String text) {
+        String t = text.trim();
+        return t.startsWith("http://") || t.startsWith("https://");
+    }
+
+    /** Looks up the first few YouTube results for a song name, on its own thread. */
+    public Search search(String query) {
+        Search search = new Search(query.trim());
+        Thread thread = new Thread(() -> runSearch(search), "MineMusic-search");
+        thread.setDaemon(true);
+        thread.start();
+        return search;
+    }
+
+    private void runSearch(Search search) {
+        Consumer<Message> progress = msg -> search.status = msg;
+        try {
+            Tools.ensure(progress, () -> search.cancelled);
+            progress.accept(new Message("minemusic.search.searching"));
+            updateYtDlpIfOld(progress);
+            List<YtDlp.Found> found;
+            try {
+                found = YtDlp.search(search.query, SEARCH_RESULTS, processes);
+            } catch (IOException first) {
+                // As with playing: a fresh yt-dlp usually fixes it. Try that once per game start.
+                if (triedUpdate || search.cancelled) {
+                    throw first;
+                }
+                triedUpdate = true;
+                progress.accept(new Message("minemusic.status.updating"));
+                YtDlp.update(processes);
+                found = YtDlp.search(search.query, SEARCH_RESULTS, processes);
+            }
+            search.results = found.stream()
+                    .map(f -> new SearchResult("https://www.youtube.com/watch?v=" + f.id(), f.title(), f.durationSeconds()))
+                    .toList();
+        } catch (InterruptedException e) {
+            search.error = new Message("minemusic.status.stopped");
+        } catch (Exception e) {
+            if (!search.cancelled) {
+                LOGGER.warn("MineMusic could not search for {}", search.query, e);
+            }
+            search.error = new Message("minemusic.status.error", describe(e));
+        }
     }
 
     /** Plays a link or song name typed in the MineMusic screen. */
@@ -389,6 +478,11 @@ public final class MusicPlayer {
         return true;
     }
 
+    /** Adds a song picked from the search results; its title is known already. */
+    public synchronized boolean addToPlaylist(String link, String title) {
+        return selected().add(link, title);
+    }
+
     public synchronized void removeFromPlaylist(int index) {
         Playlist list = selected();
         list.remove(index);
@@ -565,12 +659,7 @@ public final class MusicPlayer {
 
     private YtDlp.Track fetch(int id, String input) throws IOException, InterruptedException {
         Consumer<Message> progress = msg -> update(id, State.LOADING, msg);
-        Path exe = Path.of(Tools.ytDlp());
-        if (Files.isRegularFile(exe) && olderThan(exe, YTDLP_UPDATE_INTERVAL)) {
-            update(id, State.LOADING, new Message("minemusic.status.updating"));
-            YtDlp.update(processes);
-            Files.setLastModifiedTime(exe, FileTime.fromMillis(System.currentTimeMillis()));
-        }
+        updateYtDlpIfOld(progress);
         try {
             return YtDlp.fetch(input, progress, () -> !isCurrent(id), processes);
         } catch (IOException first) {
@@ -582,6 +671,16 @@ public final class MusicPlayer {
             update(id, State.LOADING, new Message("minemusic.status.updating"));
             YtDlp.update(processes);
             return YtDlp.fetch(input, progress, () -> !isCurrent(id), processes);
+        }
+    }
+
+    /** yt-dlp is updated once a week; YouTube changes often and old versions stop working. */
+    private void updateYtDlpIfOld(Consumer<Message> progress) throws IOException, InterruptedException {
+        Path exe = Path.of(Tools.ytDlp());
+        if (Files.isRegularFile(exe) && olderThan(exe, YTDLP_UPDATE_INTERVAL)) {
+            progress.accept(new Message("minemusic.status.updating"));
+            YtDlp.update(processes);
+            Files.setLastModifiedTime(exe, FileTime.fromMillis(System.currentTimeMillis()));
         }
     }
 

@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Playlist umbenennen",
   "minemusic.lists.name_label": "Name der Playlist:",
   "minemusic.lists.delete_title": "Diese Playlist löschen?",
-  "minemusic.lists.delete_message": "\"%s\" und alle ihre Songs werden entfernt."
+  "minemusic.lists.delete_message": "\"%s\" und alle ihre Songs werden entfernt.",
+  "minemusic.search.title": "Suchergebnisse",
+  "minemusic.search.query": "YouTube-Ergebnisse für: %s",
+  "minemusic.search.searching": "Suche auf YouTube...",
+  "minemusic.search.none": "Nichts gefunden. Versuch es mit anderen Wörtern.",
+  "minemusic.search.hint": "▶ spielt ein Lied ab, + fügt es zur Playlist hinzu",
+  "minemusic.search.add_tooltip": "Zur Playlist hinzufügen"
 }

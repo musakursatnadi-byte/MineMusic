@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "إعادة تسمية القائمة",
   "minemusic.lists.name_label": "اسم القائمة:",
   "minemusic.lists.delete_title": "حذف قائمة التشغيل هذه؟",
-  "minemusic.lists.delete_message": "سيتم حذف \"%s\" وكل أغانيها."
+  "minemusic.lists.delete_message": "سيتم حذف \"%s\" وكل أغانيها.",
+  "minemusic.search.title": "نتائج البحث",
+  "minemusic.search.query": "نتائج يوتيوب لـ: %s",
+  "minemusic.search.searching": "جارٍ البحث في يوتيوب...",
+  "minemusic.search.none": "لم يتم العثور على شيء. جرّب كلمات أخرى.",
+  "minemusic.search.hint": "▶ لتشغيل الأغنية، + لإضافتها إلى القائمة",
+  "minemusic.search.add_tooltip": "أضف إلى قائمة التشغيل"
 }

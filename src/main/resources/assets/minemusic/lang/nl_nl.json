@@ -75,5 +75,11 @@
   "minemusic.lists.rename_title": "Afspeellijst hernoemen",
   "minemusic.lists.name_label": "Naam van de lijst:",
   "minemusic.lists.delete_title": "Deze afspeellijst wissen?",
-  "minemusic.lists.delete_message": "\"%s\" en alle nummers erin worden verwijderd."
+  "minemusic.lists.delete_message": "\"%s\" en alle nummers erin worden verwijderd.",
+  "minemusic.search.title": "Zoekresultaten",
+  "minemusic.search.query": "YouTube-resultaten voor: %s",
+  "minemusic.search.searching": "Zoeken op YouTube...",
+  "minemusic.search.none": "Niets gevonden. Probeer andere woorden.",
+  "minemusic.search.hint": "▶ speelt een nummer af, + voegt het toe aan de afspeellijst",
+  "minemusic.search.add_tooltip": "Toevoegen aan afspeellijst"
 }
