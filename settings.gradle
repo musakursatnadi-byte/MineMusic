@@ -1,0 +1,19 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.fabricmc.net/' }
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'MineMusic'
+
+// Each Minecraft version is its own subproject under versions/<mc>.
+// They all compile the shared code in src/ (plus compat/<group>/ for small API differences).
+// 1.21.3 – 1.21.10 are no longer built (never published); their folders under versions/ are kept.
+// 26.1.2 only exists to test the 26.1.x jar's code on 26.1.2; it is not published.
+def mcVersions = ['1.21.11', '26.1', '26.1.2', '26.2', '26.3']
+mcVersions.each { mc ->
+    def name = 'mc' + mc.replace('.', '_')
+    include name
+    project(":${name}").projectDir = file("versions/${mc}")
+}

@@ -1,0 +1,9 @@
+{
+  "required": true,
+  "package": "dev.minemusic.mixin",
+  "compatibilityLevel": "JAVA_${java_version}",
+  "client": ["PauseScreenMixin", "MusicManagerMixin", "BossHealthOverlayAccess"],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

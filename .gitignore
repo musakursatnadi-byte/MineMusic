@@ -1,0 +1,51 @@
+# gradle
+
+.gradle/
+build/
+out/
+classes/
+
+# eclipse
+
+*.launch
+
+# idea
+
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# vscode
+
+.settings/
+.vscode/
+bin/
+.classpath
+.project
+
+# macos
+
+*.DS_Store
+
+# fabric
+
+run/
+
+# minemusic
+
+.gradle-user-home/
+dist/
+_yedek_26.2_eylul/
+eski-jarlar/
+# publishing material and private notes stay on this computer
+yayin/
+KALDIGIMIZ_YER.md
+*.log
+
+# java
+
+hs_err_*.log
+replay_*.log
+*.hprof
+*.jfr

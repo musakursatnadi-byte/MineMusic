@@ -1,0 +1,220 @@
+package dev.minemusic.audio;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+/** Runs yt-dlp to download the audio of one video (or the first search result) into the cache. */
+final class YtDlp {
+    private static final long CACHE_LIMIT_BYTES = 500L * 1024 * 1024;
+
+    record Track(String title, Path file, int durationSeconds) {
+    }
+
+    private YtDlp() {
+    }
+
+    static Track fetch(String input, Consumer<Message> status, BooleanSupplier cancelled, ProcessTracker tracker)
+            throws IOException, InterruptedException {
+        try {
+            return fetchOnce(input, status, cancelled, tracker);
+        } catch (MusicException e) {
+            // YouTube now and then refuses a download with "HTTP Error 403"; asking again usually works.
+            if (cancelled.getAsBoolean() || e.getMessage() == null || !e.getMessage().contains("HTTP Error 403")) {
+                throw e;
+            }
+            return fetchOnce(input, status, cancelled, tracker);
+        }
+    }
+
+    private static Track fetchOnce(String input, Consumer<Message> status, BooleanSupplier cancelled, ProcessTracker tracker)
+            throws IOException, InterruptedException {
+        Path cache = Tools.cacheDir();
+        Files.createDirectories(cache);
+        trimCache(cache);
+
+        List<String> cmd = baseCommand();
+        cmd.addAll(List.of(
+                "-f", "bestaudio/best",
+                "--no-simulate",
+                "--print", "video:MMID %(id)s",
+                "--print", "video:MMTITLE %(title)s",
+                "--print", "video:MMDUR %(duration)s",
+                "--progress",
+                "--newline",
+                "--progress-template", "download:MMPROG %(progress._percent_str)s",
+                "-o", cache.resolve("%(id)s.%(ext)s").toString()));
+        if (Tools.ffmpeg().endsWith(".exe")) {
+            // Our own ffmpeg (Windows); elsewhere yt-dlp finds the one on PATH by itself.
+            cmd.add("--ffmpeg-location");
+            cmd.add(Path.of(Tools.ffmpeg()).toAbsolutePath().getParent().toString());
+        }
+        cmd.add(target(input));
+
+        String id = null;
+        String title = null;
+        int duration = 0;
+        String error = null;
+
+        Process process = tracker.start(cmd);
+        try (BufferedReader out = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = out.readLine()) != null) {
+                if (cancelled.getAsBoolean()) {
+                    throw new InterruptedException();
+                }
+                if (line.startsWith("MMID ")) {
+                    id = line.substring(5).trim();
+                } else if (line.startsWith("MMTITLE ")) {
+                    title = line.substring(8).trim();
+                    status.accept(new Message("minemusic.status.downloading", title));
+                } else if (line.startsWith("MMDUR ")) {
+                    duration = parseDuration(line.substring(6));
+                } else if (line.startsWith("MMPROG ")) {
+                    String percent = line.substring(7).trim().replace("%", "");
+                    status.accept(new Message("minemusic.status.downloading_progress", percent, title != null ? title : input));
+                } else if (line.startsWith("ERROR:")) {
+                    error = line.substring(6).trim();
+                }
+            }
+            int exit = process.waitFor();
+            if (exit != 0 || id == null) {
+                // yt-dlp's own error text is English and very specific, so it is shown as it is.
+                throw new MusicException(error != null ? Message.raw(error) : new Message("minemusic.error.ytdlp_failed", Integer.toString(exit)));
+            }
+        } finally {
+            tracker.finish(process);
+        }
+
+        Path file = findCached(cache, id);
+        if (file == null) {
+            throw new MusicException(new Message("minemusic.error.no_file"));
+        }
+        Files.setLastModifiedTime(file, FileTime.fromMillis(System.currentTimeMillis()));
+        return new Track(title != null ? title : id, file, duration);
+    }
+
+    /** Looks up a song's title without downloading it (for songs added to the playlist). */
+    static String title(String input, ProcessTracker tracker) throws IOException, InterruptedException {
+        List<String> cmd = baseCommand();
+        cmd.addAll(List.of("--skip-download", "--print", "MMTITLE %(title)s"));
+        cmd.add(target(input));
+        Process process = tracker.start(cmd);
+        try (BufferedReader out = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
+            String title = null;
+            String line;
+            while ((line = out.readLine()) != null) {
+                if (line.startsWith("MMTITLE ")) {
+                    title = line.substring(8).trim();
+                }
+            }
+            process.waitFor();
+            return title;
+        } finally {
+            tracker.finish(process);
+        }
+    }
+
+    private static List<String> baseCommand() {
+        List<String> cmd = new ArrayList<>(List.of(
+                Tools.ytDlp(),
+                "--ignore-config",
+                "--no-playlist",
+                "--playlist-items", "1"));
+        if (Tools.ytDlp().endsWith(".exe")) {
+            cmd.add("--js-runtimes");
+            cmd.add("deno:" + Tools.deno());
+        }
+        return cmd;
+    }
+
+    /** Anything that is not a link is treated as a YouTube search, so typing a song name works too. */
+    private static String target(String input) {
+        return input.startsWith("http://") || input.startsWith("https://") ? input : "ytsearch1:" + input;
+    }
+
+    /** Asks yt-dlp to update itself; YouTube changes often and old versions stop working. */
+    static void update(ProcessTracker tracker) throws IOException, InterruptedException {
+        Process process = tracker.start(List.of(Tools.ytDlp(), "-U"));
+        try {
+            process.getInputStream().transferTo(java.io.OutputStream.nullOutputStream());
+            process.waitFor();
+        } finally {
+            tracker.finish(process);
+        }
+    }
+
+    private static int parseDuration(String text) {
+        try {
+            return (int) Math.round(Double.parseDouble(text.trim()));
+        } catch (NumberFormatException e) {
+            return 0; // live streams and some videos have no duration
+        }
+    }
+
+    private static Path findCached(Path cache, String id) throws IOException {
+        try (Stream<Path> files = Files.list(cache)) {
+            return files.filter(p -> {
+                        String name = p.getFileName().toString();
+                        return name.startsWith(id + ".") && !name.endsWith(".part") && !name.endsWith(".ytdl") && !name.contains(".temp");
+                    })
+                    .max(Comparator.comparingLong(YtDlp::lastModified))
+                    .orElse(null);
+        }
+    }
+
+    /**
+     * Deletes the least recently played songs once the cache grows past the limit. A file that
+     * cannot be deleted right now (an antivirus may be reading it) is skipped; tidying up must
+     * never stop the next song from playing.
+     */
+    private static void trimCache(Path cache) throws IOException {
+        List<Path> files;
+        try (Stream<Path> list = Files.list(cache)) {
+            files = new ArrayList<>(list.filter(Files::isRegularFile).sorted(Comparator.comparingLong(YtDlp::lastModified)).toList());
+        }
+        long total = 0;
+        for (Path p : files) {
+            total += size(p);
+        }
+        for (Path p : files) {
+            if (total <= CACHE_LIMIT_BYTES) {
+                break;
+            }
+            long size = size(p);
+            try {
+                if (Files.deleteIfExists(p)) {
+                    total -= size;
+                }
+            } catch (IOException e) {
+                // Locked or already gone: try the next one.
+            }
+        }
+    }
+
+    private static long size(Path p) {
+        try {
+            return Files.size(p);
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+
+    private static long lastModified(Path p) {
+        try {
+            return Files.getLastModifiedTime(p).toMillis();
+        } catch (IOException e) {
+            return 0;
+        }
+    }
+}

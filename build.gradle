@@ -1,0 +1,115 @@
+plugins {
+    // 26.x is unobfuscated (no mappings, no remap); 1.21.x needs the remapping variant.
+    id 'net.fabricmc.fabric-loom' version "${loom_version}" apply false
+    id 'net.fabricmc.fabric-loom-remap' version "${loom_version}" apply false
+}
+
+subprojects {
+    def obfuscated = project.property('obfuscated').toBoolean()
+    def mc = project.property('minecraft_version')
+    def javaVersion = project.property('java_version') as int
+
+    // A jar may cover several patch versions: it is built against the oldest one (minecraft_version),
+    // fabric.mod.json accepts the range in minecraft_dep, and mc_label names the jar (e.g. "26.1.x").
+    def mcDep = project.findProperty('minecraft_dep') ?: mc
+    def mcLabel = project.findProperty('mc_label') ?: mc
+
+    apply plugin: obfuscated ? 'net.fabricmc.fabric-loom-remap' : 'net.fabricmc.fabric-loom'
+
+    version = "${rootProject.property('mod_version')}+mc${mcLabel}"
+    group = rootProject.property('maven_group')
+
+    base {
+        archivesName = rootProject.property('archives_base_name')
+    }
+
+    // -Pselftest=mc26_2 adds the automatic in-game test (devtest/) to that one version's dev run.
+    def selftest = rootProject.findProperty('selftest') == project.name
+
+    sourceSets {
+        main {
+            // "compat" lists the small version-specific folders this version needs, e.g. "setscreen_gui,keys_mapping".
+            java.srcDirs = [rootProject.file('src/client/java')] +
+                    project.property('compat').split(',').collect { rootProject.file("compat/${it.trim()}/java") } +
+                    (selftest ? [rootProject.file('devtest/java'),
+                                 rootProject.file("devtest/compat/${project.property('testcompat')}/java")] : [])
+            resources.srcDirs = [
+                    rootProject.file('src/main/resources'),
+                    rootProject.file('src/client/resources')
+            ]
+        }
+    }
+
+    loom {
+        runs {
+            remove server
+            client {
+                runDir = 'run'
+                // -Pselftestmode=galeri picks the gallery-screenshot run instead of the normal test.
+                def mode = rootProject.findProperty('selftestmode')
+                if (selftest && mode) {
+                    vmArg "-Dminemusic.selftest=${mode}"
+                }
+                // -Pselftesthome=<folder> makes the test use a copy of the MineMusic folder.
+                def home = rootProject.findProperty('selftesthome')
+                if (selftest && home) {
+                    vmArg "-Dminemusic.home=${home}"
+                }
+            }
+        }
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${mc}"
+        // Fabric API loads the lang files and registers key mappings / the HUD. Each version compiles
+        // against the Fabric API that is installed in the matching Modrinth profile.
+        if (obfuscated) {
+            mappings loom.officialMojangMappings()
+            modImplementation "net.fabricmc:fabric-loader:${rootProject.property('loader_version')}"
+            modImplementation "net.fabricmc.fabric-api:fabric-api:${project.property('fabric_api_version')}"
+        } else {
+            implementation "net.fabricmc:fabric-loader:${rootProject.property('loader_version')}"
+            implementation "net.fabricmc.fabric-api:fabric-api:${project.property('fabric_api_version')}"
+        }
+    }
+
+    processResources {
+        def props = [
+                version          : project.version,
+                minecraft_version: mcDep,
+                java_version     : javaVersion
+        ]
+        inputs.properties props
+        filesMatching(['fabric.mod.json', '*.mixins.json']) {
+            expand props
+        }
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.toVersion(javaVersion)
+        targetCompatibility = JavaVersion.toVersion(javaVersion)
+    }
+
+    jar {
+        from(rootProject.file('LICENSE')) {
+            rename { 'LICENSE_minemusic' }
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = javaVersion
+    }
+}
+
+// Copies every finished mod jar into dist/ so they are easy to find.
+tasks.register('collectJars', Copy) {
+    subprojects.each { p ->
+        dependsOn p.tasks.named('build')
+        from(p.layout.buildDirectory.dir('libs')) {
+            // Only this version's jar: build/libs keeps the jars of older mod versions too.
+            include "${rootProject.property('archives_base_name')}-${p.version}.jar"
+        }
+    }
+    into layout.projectDirectory.dir('dist')
+}

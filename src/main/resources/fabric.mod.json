@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "id": "minemusic",
+  "version": "${version}",
+  "name": "MineMusic",
+  "description": "Paste a YouTube link or type a song name in the pause menu and listen to it in the background while you play.",
+  "authors": ["musakursatnadi"],
+  "contact": {
+    "homepage": "https://modrinth.com/mod/minemusic"
+  },
+  "license": "MIT",
+  "icon": "assets/minemusic/icon.png",
+  "environment": "client",
+  "mixins": [{ "config": "minemusic.client.mixins.json", "environment": "client" }],
+  "entrypoints": {
+    "client": ["dev.minemusic.MineMusicClient"]
+  },
+  "depends": {
+    "fabricloader": ">=0.16.0",
+    "minecraft": "${minecraft_version}",
+    "java": ">=${java_version}",
+    "fabric-api": "*"
+  }
+}
