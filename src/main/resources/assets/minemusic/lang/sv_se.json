@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Söker på YouTube...",
   "minemusic.search.none": "Inget hittades. Prova andra ord.",
   "minemusic.search.hint": "▶ spelar en låt, + lägger till den i listan",
-  "minemusic.search.add_tooltip": "Lägg till i spellistan"
+  "minemusic.search.add_tooltip": "Lägg till i spellistan",
+  "minemusic.screen.more_results": "Andra resultat",
+  "minemusic.error.live": "Livesändningar kan inte spelas: prova en vanlig video"
 }

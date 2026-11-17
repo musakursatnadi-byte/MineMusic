@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Đang tìm trên YouTube...",
   "minemusic.search.none": "Không tìm thấy gì. Hãy thử từ khác.",
   "minemusic.search.hint": "▶ phát bài hát, + thêm vào danh sách",
-  "minemusic.search.add_tooltip": "Thêm vào danh sách phát"
+  "minemusic.search.add_tooltip": "Thêm vào danh sách phát",
+  "minemusic.screen.more_results": "Kết quả khác",
+  "minemusic.error.live": "Không thể phát video trực tiếp: hãy thử một video thường"
 }

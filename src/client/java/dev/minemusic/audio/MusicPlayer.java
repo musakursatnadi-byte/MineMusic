@@ -175,8 +175,25 @@ public final class MusicPlayer {
             return;
         }
         settings.lastUrl = text;
+        settings.lastText = text;
         settings.save();
         start(text, -1, 0, null, null);
+    }
+
+    /**
+     * Plays a song picked from the search results. The MineMusic screen keeps showing the song
+     * name that was searched for, while the picked link is what F9 plays again.
+     */
+    public synchronized void playResult(String link, String query) {
+        settings.lastUrl = link;
+        settings.lastText = query.trim();
+        settings.save();
+        start(link, -1, 0, null, null);
+    }
+
+    /** What was typed for the last song, for the MineMusic screen's box. */
+    public String getLastText() {
+        return settings.lastText;
     }
 
     /** Plays one song of the list on screen; when it ends the next one of that list follows. */

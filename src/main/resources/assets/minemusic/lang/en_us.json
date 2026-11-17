@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Searching YouTube...",
   "minemusic.search.none": "Nothing found. Try other words.",
   "minemusic.search.hint": "▶ plays a song, + adds it to the playlist",
-  "minemusic.search.add_tooltip": "Add to the playlist"
+  "minemusic.search.add_tooltip": "Add to the playlist",
+  "minemusic.screen.more_results": "Other results",
+  "minemusic.error.live": "Live streams can't be played: try a normal video"
 }

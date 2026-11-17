@@ -81,5 +81,7 @@
   "minemusic.search.searching": "A pesquisar no YouTube...",
   "minemusic.search.none": "Nada encontrado. Experimenta outras palavras.",
   "minemusic.search.hint": "▶ toca a música, + adiciona-a à lista",
-  "minemusic.search.add_tooltip": "Adicionar à lista de reprodução"
+  "minemusic.search.add_tooltip": "Adicionar à lista de reprodução",
+  "minemusic.screen.more_results": "Outros resultados",
+  "minemusic.error.live": "Diretos não podem ser reproduzidos: experimenta um vídeo normal"
 }

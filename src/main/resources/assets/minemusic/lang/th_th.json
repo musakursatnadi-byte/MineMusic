@@ -81,5 +81,7 @@
   "minemusic.search.searching": "กำลังค้นหาใน YouTube...",
   "minemusic.search.none": "ไม่พบอะไรเลย ลองใช้คำอื่น",
   "minemusic.search.hint": "▶ เล่นเพลง, + เพิ่มลงในเพลย์ลิสต์",
-  "minemusic.search.add_tooltip": "เพิ่มลงในเพลย์ลิสต์"
+  "minemusic.search.add_tooltip": "เพิ่มลงในเพลย์ลิสต์",
+  "minemusic.screen.more_results": "ผลลัพธ์อื่น",
+  "minemusic.error.live": "เล่นไลฟ์สดไม่ได้ ลองใช้วิดีโอปกติ"
 }

@@ -81,5 +81,7 @@
   "minemusic.search.searching": "正在 YouTube 上搜索...",
   "minemusic.search.none": "什么也没找到。换个词试试。",
   "minemusic.search.hint": "▶ 播放歌曲，+ 添加到播放列表",
-  "minemusic.search.add_tooltip": "添加到播放列表"
+  "minemusic.search.add_tooltip": "添加到播放列表",
+  "minemusic.screen.more_results": "其他结果",
+  "minemusic.error.live": "无法播放直播：请换一个普通视频"
 }

@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Hledám na YouTube...",
   "minemusic.search.none": "Nic nenalezeno. Zkus jiná slova.",
   "minemusic.search.hint": "▶ přehraje skladbu, + ji přidá do seznamu",
-  "minemusic.search.add_tooltip": "Přidat do playlistu"
+  "minemusic.search.add_tooltip": "Přidat do playlistu",
+  "minemusic.screen.more_results": "Další výsledky",
+  "minemusic.error.live": "Živé přenosy nejde přehrát: zkus normální video"
 }

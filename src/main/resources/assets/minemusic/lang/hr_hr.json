@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Tražim na YouTubeu...",
   "minemusic.search.none": "Ništa nije pronađeno. Pokušaj s drugim riječima.",
   "minemusic.search.hint": "▶ pušta pjesmu, + je dodaje na popis",
-  "minemusic.search.add_tooltip": "Dodaj na popis za reprodukciju"
+  "minemusic.search.add_tooltip": "Dodaj na popis za reprodukciju",
+  "minemusic.screen.more_results": "Ostali rezultati",
+  "minemusic.error.live": "Prijenosi uživo ne mogu se puštati: pokušaj s običnim videom"
 }

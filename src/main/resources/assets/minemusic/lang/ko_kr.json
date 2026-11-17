@@ -81,5 +81,7 @@
   "minemusic.search.searching": "YouTube에서 검색 중...",
   "minemusic.search.none": "찾은 결과가 없습니다. 다른 단어로 해 보세요.",
   "minemusic.search.hint": "▶ 노래 재생, + 재생 목록에 추가",
-  "minemusic.search.add_tooltip": "재생 목록에 추가"
+  "minemusic.search.add_tooltip": "재생 목록에 추가",
+  "minemusic.screen.more_results": "다른 결과",
+  "minemusic.error.live": "라이브 방송은 재생할 수 없습니다. 일반 동영상을 써 보세요"
 }

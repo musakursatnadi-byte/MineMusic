@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Ricerca su YouTube...",
   "minemusic.search.none": "Nessun risultato. Prova con altre parole.",
   "minemusic.search.hint": "▶ riproduce una canzone, + la aggiunge alla playlist",
-  "minemusic.search.add_tooltip": "Aggiungi alla playlist"
+  "minemusic.search.add_tooltip": "Aggiungi alla playlist",
+  "minemusic.screen.more_results": "Altri risultati",
+  "minemusic.error.live": "Le dirette non si possono riprodurre: prova un video normale"
 }

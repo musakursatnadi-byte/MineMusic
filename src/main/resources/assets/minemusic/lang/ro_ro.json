@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Se caută pe YouTube...",
   "minemusic.search.none": "Nu s-a găsit nimic. Încearcă alte cuvinte.",
   "minemusic.search.hint": "▶ redă melodia, + o adaugă în listă",
-  "minemusic.search.add_tooltip": "Adaugă în playlist"
+  "minemusic.search.add_tooltip": "Adaugă în playlist",
+  "minemusic.screen.more_results": "Alte rezultate",
+  "minemusic.error.live": "Transmisiunile live nu pot fi redate: încearcă un videoclip obișnuit"
 }

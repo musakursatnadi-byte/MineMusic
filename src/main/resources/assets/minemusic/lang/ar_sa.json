@@ -81,5 +81,7 @@
   "minemusic.search.searching": "جارٍ البحث في يوتيوب...",
   "minemusic.search.none": "لم يتم العثور على شيء. جرّب كلمات أخرى.",
   "minemusic.search.hint": "▶ لتشغيل الأغنية، + لإضافتها إلى القائمة",
-  "minemusic.search.add_tooltip": "أضف إلى قائمة التشغيل"
+  "minemusic.search.add_tooltip": "أضف إلى قائمة التشغيل",
+  "minemusic.screen.more_results": "نتائج أخرى",
+  "minemusic.error.live": "لا يمكن تشغيل البث المباشر: جرّب فيديو عاديًا"
 }

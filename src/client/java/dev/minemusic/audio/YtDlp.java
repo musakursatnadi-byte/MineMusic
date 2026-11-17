@@ -12,11 +12,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 /** Runs yt-dlp: finds songs on YouTube and downloads the audio of one of them into the cache. */
 final class YtDlp {
     private static final long CACHE_LIMIT_BYTES = 500L * 1024 * 1024;
+    // Live streams (24/7 "radio" mixes) never end, so they can neither be downloaded nor played.
+    private static final String NOT_LIVE = "!is_live & live_status!=is_live";
+    // How many search results Play looks through for the first one that is not live.
+    private static final int SEARCH_TRIES = 5;
+    private static final int EXIT_MAX_DOWNLOADS = 101;
+    private static final Pattern MIX_LINK = Pattern.compile("[?&]list=RD(?:AMVM)?([A-Za-z0-9_-]{11})(?:&|$)");
 
     record Track(String title, Path file, int durationSeconds) {
     }
@@ -47,7 +55,12 @@ final class YtDlp {
         Files.createDirectories(cache);
         trimCache(cache);
 
-        List<String> cmd = baseCommand();
+        boolean byName = !isLink(input);
+        List<String> cmd = byName ? searchCommand() : baseCommand();
+        if (byName) {
+            // The first result that is not a live stream (a never-ending live "mix" cannot be played).
+            cmd.addAll(List.of("--max-downloads", "1"));
+        }
         cmd.addAll(List.of(
                 "-f", "bestaudio/best",
                 "--no-simulate",
@@ -63,7 +76,7 @@ final class YtDlp {
             cmd.add("--ffmpeg-location");
             cmd.add(Path.of(Tools.ffmpeg()).toAbsolutePath().getParent().toString());
         }
-        cmd.add(target(input));
+        cmd.add(byName ? "ytsearch" + SEARCH_TRIES + ":" + input : link(input));
 
         String id = null;
         String title = null;
@@ -92,7 +105,13 @@ final class YtDlp {
                 }
             }
             int exit = process.waitFor();
-            if (exit != 0 || id == null) {
+            // 101: "--max-downloads" stopped the search after the first song, as asked.
+            boolean finished = exit == 0 || exit == EXIT_MAX_DOWNLOADS;
+            if (finished && id == null && error == null) {
+                // Nothing passed the filter: the link (or every result) is a live stream.
+                throw new MusicException(new Message("minemusic.error.live"));
+            }
+            if (!finished || id == null) {
                 // yt-dlp's own error text is English and very specific, so it is shown as it is.
                 throw new MusicException(error != null ? Message.raw(error) : new Message("minemusic.error.ytdlp_failed", Integer.toString(exit)));
             }
@@ -110,9 +129,14 @@ final class YtDlp {
 
     /** Looks up a song's title without downloading it (for songs added to the playlist). */
     static String title(String input, ProcessTracker tracker) throws IOException, InterruptedException {
+        if (!isLink(input)) {
+            // The same song that Play will pick: the first result that is not a live stream.
+            List<Found> found = search(input, SEARCH_TRIES, tracker);
+            return found.isEmpty() ? null : found.get(0).title();
+        }
         List<String> cmd = baseCommand();
         cmd.addAll(List.of("--skip-download", "--print", "MMTITLE %(title)s"));
-        cmd.add(target(input));
+        cmd.add(link(input));
         Process process = tracker.start(cmd);
         try (BufferedReader out = new BufferedReader(new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8))) {
             String title = null;
@@ -138,6 +162,7 @@ final class YtDlp {
                 Tools.ytDlp(),
                 "--ignore-config",
                 "--flat-playlist",
+                "--match-filter", NOT_LIVE,
                 // The title goes last, so a "|" inside it does not matter.
                 "--print", "MMRES %(id)s|%(duration|)s|%(title)s"));
         addJsRuntime(cmd);
@@ -167,14 +192,44 @@ final class YtDlp {
         return found;
     }
 
+    /** For a link: just that one video (a link from a playlist or a Mix plays the song it points at). */
     private static List<String> baseCommand() {
         List<String> cmd = new ArrayList<>(List.of(
                 Tools.ytDlp(),
                 "--ignore-config",
                 "--no-playlist",
-                "--playlist-items", "1"));
+                "--playlist-items", "1",
+                "--match-filter", NOT_LIVE));
         addJsRuntime(cmd);
         return cmd;
+    }
+
+    /** For a song name: the first few search results, live streams left out. */
+    private static List<String> searchCommand() {
+        List<String> cmd = new ArrayList<>(List.of(
+                Tools.ytDlp(),
+                "--ignore-config",
+                "--match-filter", NOT_LIVE));
+        addJsRuntime(cmd);
+        return cmd;
+    }
+
+    private static boolean isLink(String input) {
+        return input.startsWith("http://") || input.startsWith("https://");
+    }
+
+    /**
+     * A YouTube Mix page (".../playlist?list=RD" + a video id) cannot be opened ("this playlist
+     * type is unviewable"), but the id in it is the song the Mix starts from, so that one plays.
+     */
+    static String link(String input) {
+        if (!input.contains("v=")) {
+            Matcher mix = MIX_LINK.matcher(input);
+            if (mix.find()) {
+                return "https://www.youtube.com/watch?v=" + mix.group(1);
+            }
+        }
+        return input;
     }
 
     /** yt-dlp needs a JavaScript program (deno) to read YouTube; on Windows it is our own copy. */
@@ -183,11 +238,6 @@ final class YtDlp {
             cmd.add("--js-runtimes");
             cmd.add("deno:" + Tools.deno());
         }
-    }
-
-    /** Anything that is not a link is treated as a YouTube search, so typing a song name works too. */
-    private static String target(String input) {
-        return input.startsWith("http://") || input.startsWith("https://") ? input : "ytsearch1:" + input;
     }
 
     /** Asks yt-dlp to update itself; YouTube changes often and old versions stop working. */

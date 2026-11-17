@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Buscando no YouTube...",
   "minemusic.search.none": "Nada encontrado. Tente outras palavras.",
   "minemusic.search.hint": "▶ toca a música, + adiciona à playlist",
-  "minemusic.search.add_tooltip": "Adicionar à playlist"
+  "minemusic.search.add_tooltip": "Adicionar à playlist",
+  "minemusic.screen.more_results": "Outros resultados",
+  "minemusic.error.live": "Transmissões ao vivo não podem ser tocadas: tente um vídeo normal"
 }

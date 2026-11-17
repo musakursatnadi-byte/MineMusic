@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Recherche sur YouTube...",
   "minemusic.search.none": "Rien trouvé. Essaie d'autres mots.",
   "minemusic.search.hint": "▶ joue une chanson, + l'ajoute à la playlist",
-  "minemusic.search.add_tooltip": "Ajouter à la playlist"
+  "minemusic.search.add_tooltip": "Ajouter à la playlist",
+  "minemusic.screen.more_results": "Autres résultats",
+  "minemusic.error.live": "Les directs ne peuvent pas être lus : essaie une vidéo normale"
 }

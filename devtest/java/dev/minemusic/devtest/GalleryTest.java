@@ -302,7 +302,7 @@ final class GalleryTest {
         onMain(() -> Compat.setScreen(mc, new MineMusicScreen(null)));
         sleep(1);
         onMain(() -> find(TestCompat.screen(mc), EditBox.class).setValue("C418 Sweden"));
-        SelfTest.press(mc, "minemusic.screen.play");
+        SelfTest.press(mc, "minemusic.screen.more_results");
         SelfTest.waitForResults(mc);
         sleep(2);
         parkMouse(mc);

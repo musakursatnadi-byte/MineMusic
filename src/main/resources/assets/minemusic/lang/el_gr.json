@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Αναζήτηση στο YouTube...",
   "minemusic.search.none": "Δεν βρέθηκε τίποτα. Δοκίμασε άλλες λέξεις.",
   "minemusic.search.hint": "▶ παίζει το τραγούδι, + το προσθέτει στη λίστα",
-  "minemusic.search.add_tooltip": "Προσθήκη στη λίστα αναπαραγωγής"
+  "minemusic.search.add_tooltip": "Προσθήκη στη λίστα αναπαραγωγής",
+  "minemusic.screen.more_results": "Άλλα αποτελέσματα",
+  "minemusic.error.live": "Οι ζωντανές μεταδόσεις δεν παίζουν: δοκίμασε ένα κανονικό βίντεο"
 }

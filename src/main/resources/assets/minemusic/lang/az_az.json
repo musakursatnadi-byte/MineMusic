@@ -81,5 +81,7 @@
   "minemusic.search.searching": "YouTube-da axtarılır...",
   "minemusic.search.none": "Heç nə tapılmadı. Başqa sözlər yoxla.",
   "minemusic.search.hint": "▶ mahnını çalır, + siyahıya əlavə edir",
-  "minemusic.search.add_tooltip": "Çalğı siyahısına əlavə et"
+  "minemusic.search.add_tooltip": "Çalğı siyahısına əlavə et",
+  "minemusic.screen.more_results": "Digər nəticələr",
+  "minemusic.error.live": "Canlı yayımlar çalınmır: adi bir video yoxla"
 }

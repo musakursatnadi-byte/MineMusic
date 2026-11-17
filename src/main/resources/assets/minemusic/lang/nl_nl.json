@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Zoeken op YouTube...",
   "minemusic.search.none": "Niets gevonden. Probeer andere woorden.",
   "minemusic.search.hint": "▶ speelt een nummer af, + voegt het toe aan de afspeellijst",
-  "minemusic.search.add_tooltip": "Toevoegen aan afspeellijst"
+  "minemusic.search.add_tooltip": "Toevoegen aan afspeellijst",
+  "minemusic.screen.more_results": "Andere resultaten",
+  "minemusic.error.live": "Livestreams kunnen niet worden afgespeeld: probeer een gewone video"
 }

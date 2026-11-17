@@ -16,6 +16,9 @@ final class Settings {
     boolean muteGameMusic = true;
     boolean showHud = true;
     String lastUrl = "";
+    // What the player typed for the last song (a song name stays a name even when a picked
+    // search result, a link, is what lastUrl plays again); shown in the MineMusic screen's box.
+    String lastText = "";
     // The playlist shown in the Playlist screen (its number in the lists folder).
     int list = 1;
 
@@ -38,6 +41,7 @@ final class Settings {
                 s.muteGameMusic = Boolean.parseBoolean(p.getProperty("muteGameMusic", "true").trim());
                 s.showHud = Boolean.parseBoolean(p.getProperty("showHud", "true").trim());
                 s.lastUrl = p.getProperty("lastUrl", "");
+                s.lastText = p.getProperty("lastText", s.lastUrl);
                 s.list = Integer.parseInt(p.getProperty("list", "1").trim());
             } catch (IOException | IllegalArgumentException ignored) {
                 // A broken settings file just falls back to the defaults.
@@ -54,6 +58,7 @@ final class Settings {
         p.setProperty("muteGameMusic", Boolean.toString(muteGameMusic));
         p.setProperty("showHud", Boolean.toString(showHud));
         p.setProperty("lastUrl", lastUrl);
+        p.setProperty("lastText", lastText);
         p.setProperty("list", Integer.toString(list));
         try {
             Files.createDirectories(file().getParent());

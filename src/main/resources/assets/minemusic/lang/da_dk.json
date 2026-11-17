@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Søger på YouTube...",
   "minemusic.search.none": "Intet fundet. Prøv andre ord.",
   "minemusic.search.hint": "▶ afspiller en sang, + føjer den til listen",
-  "minemusic.search.add_tooltip": "Føj til afspilningslisten"
+  "minemusic.search.add_tooltip": "Føj til afspilningslisten",
+  "minemusic.screen.more_results": "Andre resultater",
+  "minemusic.error.live": "Livestreams kan ikke afspilles: prøv en almindelig video"
 }

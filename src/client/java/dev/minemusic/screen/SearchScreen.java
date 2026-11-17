@@ -110,7 +110,7 @@ public final class SearchScreen extends Screen {
     }
 
     private void play(MusicPlayer.SearchResult result) {
-        player.play(result.link());
+        player.playResult(result.link(), search.query());
         // Back to the MineMusic screen, which shows the song loading.
         onClose();
     }

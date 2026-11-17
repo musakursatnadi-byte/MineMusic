@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Keresés a YouTube-on...",
   "minemusic.search.none": "Nincs találat. Próbálj más szavakat.",
   "minemusic.search.hint": "▶ lejátssza a dalt, + hozzáadja a listához",
-  "minemusic.search.add_tooltip": "Hozzáadás a lejátszási listához"
+  "minemusic.search.add_tooltip": "Hozzáadás a lejátszási listához",
+  "minemusic.screen.more_results": "Más találatok",
+  "minemusic.error.live": "Élő közvetítést nem lehet lejátszani: próbálj egy sima videót"
 }

@@ -111,9 +111,13 @@ public final class SelfTest {
             sleep(1);
             check(!vanillaMusicPlaying(mc), "MineMusic çalarken Minecraft müziği sustu");
 
-            // --- A song name shows the first YouTube results; ▶ plays the one picked ---
-            typeAndPress(mc, SONG_1, "minemusic.screen.play");
-            check(onMainGet(() -> TestCompat.screen(mc) instanceof SearchScreen), "Şarkı adıyla 'Çal' arama sonuçlarını açtı");
+            // --- A song name plays the first YouTube result at once; "Other results" lets you pick another ---
+            playAndWait(mc, SONG_1, "Şarkı adı");
+            check(player.getTitle().contains("Sweden") && onMainGet(() -> TestCompat.screen(mc) instanceof MineMusicScreen),
+                    "Şarkı adıyla Çal ilk sonucu hemen çaldı: " + player.getTitle());
+            press(mc, "minemusic.screen.more_results");
+            sleep(1);
+            check(onMainGet(() -> TestCompat.screen(mc) instanceof SearchScreen), "'Diğer sonuçlar' arama sonuçlarını açtı");
             List<Button> results = waitForResults(mc);
             log("  sonuçlar: " + results.stream().map(b -> b.getMessage().getString()).toList());
             check(results.size() >= 3 && results.get(0).getMessage().getString().contains("Sweden"),
@@ -127,9 +131,14 @@ public final class SelfTest {
             check(secondLabel.startsWith("▶ " + picked.substring(0, Math.min(15, picked.length())))
                             && onMainGet(() -> TestCompat.screen(mc) instanceof MineMusicScreen),
                     "Seçilen şarkı çalıyor (" + picked + ") ve MineMusic ekranına dönüldü");
+            // Opening MineMusic again (like F10) shows the song name that was typed, not the picked link.
+            onMain(() -> Compat.setScreen(mc, new MineMusicScreen(null)));
+            sleep(1);
+            String boxText = onMainGet(() -> find(TestCompat.screen(mc), EditBox.class).getValue());
+            check(boxText.equals(SONG_1), "MineMusic yeniden açılınca kutuda şarkı adı duruyor: '" + boxText + "'");
 
-            // --- Playlist: "+ Add to list" with a song name shows the results too ---
-            addFromSearch(mc, SONG_1);
+            // --- Playlist: "+ Add to list" adds a song name at once; "+" in Other results adds the one picked ---
+            typeAndPress(mc, SONG_1, "minemusic.screen.add");
             addFromSearch(mc, SONG_2);
             check(player.getPlaylist().size() == 2, "İki şarkı listeye eklendi (liste: " + player.getPlaylist().size() + ")");
             waitFor("şarkı adları bulundu", () -> player.getPlaylist().stream().noneMatch(e -> e.title().equals(e.input())), 60);
@@ -332,9 +341,9 @@ public final class SelfTest {
         onMain(() -> button.onPress(ENTER));
     }
 
-    /** In the search results: "+" next to the first result adds it, and the "+" turns into a tick. */
+    /** In "Other results": "+" next to the first result adds it, and the "+" turns into a tick. */
     private static void addFromSearch(Minecraft mc, String song) throws Exception {
-        typeAndPress(mc, song, "minemusic.screen.add");
+        typeAndPress(mc, song, "minemusic.screen.more_results");
         List<Button> results = waitForResults(mc);
         Button plus = onMainGet(() -> findLiteral(TestCompat.screen(mc), "+"));
         onMain(() -> plus.onPress(ENTER));

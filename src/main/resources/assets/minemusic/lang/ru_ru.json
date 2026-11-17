@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Поиск на YouTube...",
   "minemusic.search.none": "Ничего не найдено. Попробуй другие слова.",
   "minemusic.search.hint": "▶ включает песню, + добавляет её в плейлист",
-  "minemusic.search.add_tooltip": "Добавить в плейлист"
+  "minemusic.search.add_tooltip": "Добавить в плейлист",
+  "minemusic.screen.more_results": "Другие результаты",
+  "minemusic.error.live": "Прямые трансляции нельзя воспроизвести: попробуй обычное видео"
 }

@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Haetaan YouTubesta...",
   "minemusic.search.none": "Mitään ei löytynyt. Kokeile muita sanoja.",
   "minemusic.search.hint": "▶ soittaa kappaleen, + lisää sen soittolistaan",
-  "minemusic.search.add_tooltip": "Lisää soittolistaan"
+  "minemusic.search.add_tooltip": "Lisää soittolistaan",
+  "minemusic.screen.more_results": "Muut tulokset",
+  "minemusic.error.live": "Suoria lähetyksiä ei voi soittaa: kokeile tavallista videota"
 }

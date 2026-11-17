@@ -81,5 +81,7 @@
   "minemusic.search.searching": "מחפש ב-YouTube...",
   "minemusic.search.none": "לא נמצא כלום. נסה מילים אחרות.",
   "minemusic.search.hint": "▶ מנגן שיר, + מוסיף אותו לרשימה",
-  "minemusic.search.add_tooltip": "הוסף לרשימת ההשמעה"
+  "minemusic.search.add_tooltip": "הוסף לרשימת ההשמעה",
+  "minemusic.screen.more_results": "תוצאות נוספות",
+  "minemusic.error.live": "אי אפשר לנגן שידורים חיים: נסה סרטון רגיל"
 }

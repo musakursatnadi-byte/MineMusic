@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Mencari di YouTube...",
   "minemusic.search.none": "Tidak ada yang ditemukan. Coba kata lain.",
   "minemusic.search.hint": "▶ memutar lagu, + menambahkannya ke daftar",
-  "minemusic.search.add_tooltip": "Tambahkan ke daftar putar"
+  "minemusic.search.add_tooltip": "Tambahkan ke daftar putar",
+  "minemusic.screen.more_results": "Hasil lain",
+  "minemusic.error.live": "Siaran langsung tidak bisa diputar: coba video biasa"
 }

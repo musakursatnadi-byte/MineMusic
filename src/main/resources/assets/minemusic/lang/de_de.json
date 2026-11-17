@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Suche auf YouTube...",
   "minemusic.search.none": "Nichts gefunden. Versuch es mit anderen Wörtern.",
   "minemusic.search.hint": "▶ spielt ein Lied ab, + fügt es zur Playlist hinzu",
-  "minemusic.search.add_tooltip": "Zur Playlist hinzufügen"
+  "minemusic.search.add_tooltip": "Zur Playlist hinzufügen",
+  "minemusic.screen.more_results": "Andere Treffer",
+  "minemusic.error.live": "Livestreams können nicht abgespielt werden: versuch ein normales Video"
 }

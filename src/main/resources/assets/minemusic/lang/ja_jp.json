@@ -81,5 +81,7 @@
   "minemusic.search.searching": "YouTube で検索中...",
   "minemusic.search.none": "見つかりませんでした。別の言葉で試してください。",
   "minemusic.search.hint": "▶ で再生、+ でプレイリストに追加",
-  "minemusic.search.add_tooltip": "プレイリストに追加"
+  "minemusic.search.add_tooltip": "プレイリストに追加",
+  "minemusic.screen.more_results": "他の候補",
+  "minemusic.error.live": "ライブ配信は再生できません。通常の動画を試してください"
 }

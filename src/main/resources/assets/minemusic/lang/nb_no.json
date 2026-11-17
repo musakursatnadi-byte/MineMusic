@@ -81,5 +81,7 @@
   "minemusic.search.searching": "Søker på YouTube...",
   "minemusic.search.none": "Fant ingenting. Prøv andre ord.",
   "minemusic.search.hint": "▶ spiller en sang, + legger den til i listen",
-  "minemusic.search.add_tooltip": "Legg til i spillelisten"
+  "minemusic.search.add_tooltip": "Legg til i spillelisten",
+  "minemusic.screen.more_results": "Andre resultater",
+  "minemusic.error.live": "Direktesendinger kan ikke spilles av: prøv en vanlig video"
 }

@@ -12,7 +12,7 @@ A client-side [Fabric](https://fabricmc.net/) mod for Minecraft Java Edition 1.2
 ## Features
 
 - A **MineMusic** button in the pause menu (or press **F10**)
-- Play a YouTube **link** or just type a **song name** and pick the right song from the first 5 YouTube results
+- Play a YouTube **link** or just type a **song name**: the first YouTube result plays at once, and **Other results** shows the first 5 to pick another one
 - Pause / resume, stop, volume slider (Minecraft's master volume applies too), repeat (off / song / list)
 - Leaving a world or a server turns the music off; **F8** in the next world goes on where it stopped
 - **Playlists**: as many as you like, with names; play all, previous / next, shuffle, reorder, remove
@@ -64,7 +64,7 @@ Made by **musakursatnadi**: the idea, the features, the testing and the hand-dra
 Minecraft Java Edition 1.21.11, 26.1.x, 26.2 ve 26.3 için, sadece istemci tarafında çalışan bir Fabric modu. İndirmek için: [modrinth.com/mod/minemusic](https://modrinth.com/mod/minemusic). Lisans: [MIT](LICENSE). Kullanabilir, paylaşabilir ve değiştirebilirsin; lisansı ve yapanın adını koruman yeter.
 
 - Esc menüsünde **MineMusic** butonu (ya da **F10**)
-- YouTube **linki** ya da **şarkı adı** (ilk 5 YouTube sonucundan doğru şarkıyı seçersin)
+- YouTube **linki** ya da **şarkı adı**: ilk sonuç hemen çalar, **Diğer sonuçlar** ilk 5 sonuçtan başkasını seçtirir
 - Duraklat / devam et, durdur, ses ayarı, tekrar (kapalı / şarkı / liste)
 - **Çalma listeleri**: istediğin kadar, adlı liste; hepsini çal, önceki / sonraki, karışık, sırala, sil
 - Sol üst köşede **şarkının adı ve süresi** (boss çubuğunun altına iner)

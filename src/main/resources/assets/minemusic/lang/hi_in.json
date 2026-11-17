@@ -81,5 +81,7 @@
   "minemusic.search.searching": "YouTube पर खोज रहे हैं...",
   "minemusic.search.none": "कुछ नहीं मिला। दूसरे शब्द आज़माएँ।",
   "minemusic.search.hint": "▶ गाना चलाता है, + उसे सूची में जोड़ता है",
-  "minemusic.search.add_tooltip": "प्लेलिस्ट में जोड़ें"
+  "minemusic.search.add_tooltip": "प्लेलिस्ट में जोड़ें",
+  "minemusic.screen.more_results": "अन्य परिणाम",
+  "minemusic.error.live": "लाइव स्ट्रीम नहीं चल सकती: कोई सामान्य वीडियो आज़माएँ"
 }

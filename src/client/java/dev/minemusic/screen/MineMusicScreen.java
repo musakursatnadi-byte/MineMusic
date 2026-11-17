@@ -22,6 +22,7 @@ public final class MineMusicScreen extends Screen {
     private HeaderAndFooterLayout layout;
     private EditBox linkBox;
     private Button pauseButton;
+    private Button moreButton;
     private Button previousButton;
     private Button nextButton;
     private Button repeatButton;
@@ -51,14 +52,17 @@ public final class MineMusicScreen extends Screen {
 
         // Minecraft hides an EditBox hint while the box is focused, so the label says what goes in it.
         body.addChild(new StringWidget(Component.translatable("minemusic.screen.link_label"), font));
-        linkBox = new EditBox(font, ROW_WIDTH, 20, Component.translatable("minemusic.screen.link_label"));
+        // The box and "Other results" share a row as wide as the rows below: 204 + 4 + 100 = 308.
+        LinearLayout input = body.addChild(LinearLayout.horizontal().spacing(4));
+        linkBox = new EditBox(font, ROW_WIDTH - 104, 20, Component.translatable("minemusic.screen.link_label"));
         linkBox.setMaxLength(1000);
         linkBox.setHint(Component.translatable("minemusic.screen.link_hint").withStyle(ChatFormatting.GRAY));
-        linkBox.setValue(typedLink != null ? typedLink : player.getLastUrl());
-        body.addChild(linkBox);
+        linkBox.setValue(typedLink != null ? typedLink : player.getLastText());
+        input.addChild(linkBox);
+        moreButton = input.addChild(button("minemusic.screen.more_results", 100, b -> openResults()));
 
         LinearLayout controls = body.addChild(LinearLayout.horizontal().spacing(4));
-        controls.addChild(button("minemusic.screen.play", 100, b -> play()));
+        controls.addChild(button("minemusic.screen.play", 100, b -> player.play(linkBox.getValue())));
         pauseButton = controls.addChild(Button.builder(pauseLabel(), b -> player.togglePause()).width(100).build());
         controls.addChild(button("minemusic.screen.stop", 100, b -> player.stop()));
 
@@ -103,23 +107,23 @@ public final class MineMusicScreen extends Screen {
         Compat.setScreen(minecraft, parent);
     }
 
-    /** A link plays at once; a song name opens the search results to pick the right song from. */
-    private void play() {
+    /**
+     * Play takes the first YouTube result for a song name at once; when it is not the right song,
+     * "Other results" shows the first few to pick another one from.
+     */
+    private void openResults() {
         String input = linkBox.getValue().trim();
-        if (input.isEmpty() || MusicPlayer.isLink(input)) {
-            player.play(input);
-        } else {
+        if (canSearch(input)) {
             Compat.setScreen(minecraft, new SearchScreen(this, input));
         }
     }
 
+    private static boolean canSearch(String input) {
+        return !input.isBlank() && !MusicPlayer.isLink(input);
+    }
+
     private void addToPlaylist() {
         String input = linkBox.getValue().trim();
-        if (!input.isEmpty() && !MusicPlayer.isLink(input)) {
-            // The results screen has a "+" next to every song.
-            Compat.setScreen(minecraft, new SearchScreen(this, input));
-            return;
-        }
         if (player.addToPlaylist(input)) {
             flash = Component.translatable("minemusic.screen.added", input).withStyle(ChatFormatting.AQUA);
         } else {
@@ -134,6 +138,7 @@ public final class MineMusicScreen extends Screen {
         MusicPlayer.State state = player.getState();
         pauseButton.setMessage(pauseLabel());
         pauseButton.active = state == MusicPlayer.State.PLAYING || state == MusicPlayer.State.PAUSED;
+        moreButton.active = canSearch(linkBox.getValue());
         boolean hasPlaylist = !player.getPlaylist().isEmpty();
         previousButton.active = hasPlaylist;
         nextButton.active = hasPlaylist;

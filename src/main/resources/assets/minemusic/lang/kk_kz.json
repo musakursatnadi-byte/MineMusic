@@ -81,5 +81,7 @@
   "minemusic.search.searching": "YouTube-тан іздеу...",
   "minemusic.search.none": "Ештеңе табылмады. Басқа сөздерді байқап көр.",
   "minemusic.search.hint": "▶ әнді ойнатады, + оны тізімге қосады",
-  "minemusic.search.add_tooltip": "Ойнату тізіміне қосу"
+  "minemusic.search.add_tooltip": "Ойнату тізіміне қосу",
+  "minemusic.screen.more_results": "Басқа нәтижелер",
+  "minemusic.error.live": "Тікелей эфирлерді ойнату мүмкін емес: қарапайым бейне байқап көр"
 }
