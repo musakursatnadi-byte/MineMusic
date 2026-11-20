@@ -29,7 +29,8 @@ subprojects {
     sourceSets {
         main {
             // "compat" lists the small version-specific folders this version needs, e.g. "setscreen_gui,keys_mapping".
-            java.srcDirs = [rootProject.file('src/client/java')] +
+            // loader/fabric holds the Fabric entry point; the Forge jars are a separate build in forge/.
+            java.srcDirs = [rootProject.file('src/client/java'), rootProject.file('loader/fabric/java')] +
                     project.property('compat').split(',').collect { rootProject.file("compat/${it.trim()}/java") } +
                     (selftest ? [rootProject.file('devtest/java'),
                                  rootProject.file("devtest/compat/${project.property('testcompat')}/java")] : [])

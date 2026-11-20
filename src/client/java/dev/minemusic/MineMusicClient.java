@@ -4,8 +4,6 @@ import dev.minemusic.audio.MusicPlayer;
 import dev.minemusic.compat.Compat;
 import dev.minemusic.compat.HudCompat;
 import dev.minemusic.keys.MineMusicKeys;
-import net.fabricmc.api.ClientModInitializer;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.DisconnectedScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -15,21 +13,32 @@ import net.minecraft.sounds.SoundSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class MineMusicClient implements ClientModInitializer {
+/**
+ * The start of the mod, the same for every mod loader. The loader's own entry point
+ * (loader/fabric or loader/forge) calls {@link #init()} once and {@link #endTick} after every
+ * client tick.
+ */
+public final class MineMusicClient {
     public static final String MOD_ID = "minemusic";
     private static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
     private static boolean inWorld;
 
-    @Override
-    public void onInitializeClient() {
+    private MineMusicClient() {
+    }
+
+    public static void init() {
         // The game's master volume slider turns MineMusic down too.
         MusicPlayer.get().setGameVolume(() -> Minecraft.getInstance().options.getSoundSourceVolume(SoundSource.MASTER));
         MineMusicKeys.register();
         HudCompat.register();
-        ClientTickEvents.END_CLIENT_TICK.register(MineMusicClient::turnOffAfterLeaving);
         LOGGER.info("MineMusic client initialized.");
         startSelfTestIfPresent();
+    }
+
+    public static void endTick(Minecraft minecraft) {
+        MineMusicKeys.tick(minecraft);
+        turnOffAfterLeaving(minecraft);
     }
 
     /**

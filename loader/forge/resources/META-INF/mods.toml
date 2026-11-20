@@ -1,0 +1,29 @@
+modLoader="javafml"
+loaderVersion="[${forge_major},)"
+license="MIT"
+issueTrackerURL="https://github.com/musakursatnadi-byte/MineMusic/issues"
+# MineMusic only plays music for you; servers do not need it.
+clientSideOnly=true
+
+[[mods]]
+modId="minemusic"
+version="${version}"
+displayName="MineMusic"
+displayURL="https://modrinth.com/mod/minemusic"
+logoFile="assets/minemusic/icon.png"
+authors="musakursatnadi"
+description='''Paste a YouTube link or type a song name in the pause menu and listen to it in the background while you play.'''
+
+[[dependencies.minemusic]]
+    modId="forge"
+    mandatory=true
+    versionRange="[${forge_major},)"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.minemusic]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="${minecraft_range}"
+    ordering="NONE"
+    side="CLIENT"

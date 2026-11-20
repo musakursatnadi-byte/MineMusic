@@ -5,7 +5,6 @@ import dev.minemusic.audio.MusicPlayer;
 import dev.minemusic.compat.Compat;
 import dev.minemusic.compat.KeyCompat;
 import dev.minemusic.screen.MineMusicScreen;
-import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 
@@ -33,7 +32,6 @@ public final class MineMusicKeys {
         onOff = KeyCompat.register("key.minemusic.toggle", KEY_F8);
         next = KeyCompat.register("key.minemusic.next", UNBOUND);
         previous = KeyCompat.register("key.minemusic.previous", UNBOUND);
-        ClientTickEvents.END_CLIENT_TICK.register(MineMusicKeys::tick);
     }
 
     private static boolean checkedSavedKeys;
@@ -58,7 +56,8 @@ public final class MineMusicKeys {
         }
     }
 
-    private static void tick(Minecraft minecraft) {
+    /** Called after every client tick (from MineMusicClient.endTick). */
+    public static void tick(Minecraft minecraft) {
         if (!checkedSavedKeys) {
             checkedSavedKeys = true;
             repairSavedKeys(minecraft);

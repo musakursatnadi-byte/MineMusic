@@ -1,0 +1,119 @@
+plugins {
+    id 'net.minecraftforge.gradle' version '[7.0.17,8)' apply false
+}
+
+// The MineMusic folder: the shared code, the compat folders and the version number live there.
+def common = rootProject.file('..')
+def modVersion = new Properties().with { p ->
+    new File(common, 'gradle.properties').withInputStream { p.load(it) }
+    p.getProperty('mod_version')
+}
+def mixinConfig = 'minemusic.client.mixins.json'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'net.minecraftforge.gradle'
+
+    def mc = project.property('minecraft_version')
+    def javaVersion = project.property('java_version') as int
+
+    version = "${modVersion}+forge${mc}"
+    group = 'dev.minemusic'
+
+    base {
+        archivesName = 'minemusic'
+    }
+
+    java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+
+    // -Pselftest=forge26_2 adds the automatic in-game test (devtest/) to that one version's dev run.
+    def selftest = rootProject.findProperty('selftest') == project.name
+
+    sourceSets {
+        main {
+            java.srcDirs = [new File(common, 'src/client/java'), new File(common, 'loader/forge/java')] +
+                    project.property('compat').split(',').collect { new File(common, "compat/${it.trim()}/java") } +
+                    (selftest ? [new File(common, 'devtest/java'),
+                                 new File(common, "devtest/compat/${project.property('testcompat')}/java")] : [])
+            resources.srcDirs = [
+                    new File(common, 'src/main/resources'),
+                    new File(common, 'src/client/resources'),
+                    new File(common, 'loader/forge/resources')
+            ]
+            resources.exclude 'fabric.mod.json'
+        }
+    }
+
+    minecraft {
+        runs {
+            register('client') {
+                workingDir = layout.projectDirectory.dir('run')
+                // Mixin finds the config in the jar's manifest; the dev run has no jar, so it is named here.
+                args "--mixin.config=${mixinConfig}"
+                def mode = rootProject.findProperty('selftestmode')
+                if (selftest && mode) {
+                    jvmArgs "-Dminemusic.selftest=${mode}"
+                }
+                def home = rootProject.findProperty('selftesthome')
+                if (selftest && home) {
+                    jvmArgs "-Dminemusic.home=${home}"
+                }
+                if (selftest) {
+                    args '--quickPlaySingleplayer', 'SelfTestWorld'
+                }
+            }
+        }
+    }
+
+    repositories {
+        minecraft.mavenizer(it)
+        maven fg.forgeMaven
+        maven fg.minecraftLibsMaven
+        mavenCentral()
+    }
+
+    dependencies {
+        implementation minecraft.dependency("net.minecraftforge:forge:${mc}-${project.property('forge_version')}")
+        annotationProcessor "net.minecraftforge:eventbus-validator:${project.property('eventbus_validator')}"
+    }
+
+    processResources {
+        def props = [
+                version          : project.version,
+                forge_major      : project.property('forge_version').split('\\.')[0],
+                minecraft_range  : project.property('minecraft_range'),
+                // Only used by the mixin config: the highest Java level Forge's Mixin knows.
+                java_version     : project.property('mixin_java'),
+                pack_format      : project.property('pack_format')
+        ]
+        inputs.properties props
+        filesMatching(['META-INF/mods.toml', 'pack.mcmeta', '*.mixins.json']) {
+            expand props
+        }
+    }
+
+    jar {
+        manifest {
+            attributes['MixinConfigs'] = mixinConfig
+        }
+        from(new File(common, 'LICENSE')) {
+            rename { 'LICENSE_minemusic' }
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = javaVersion
+    }
+}
+
+// Copies every finished Forge jar into ../dist next to the Fabric jars.
+tasks.register('collectJars', Copy) {
+    subprojects.each { p ->
+        dependsOn p.tasks.named('build')
+        from(p.layout.buildDirectory.dir('libs')) {
+            include "minemusic-${p.version}.jar"
+        }
+    }
+    into new File(common, 'dist')
+}
