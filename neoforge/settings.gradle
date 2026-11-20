@@ -1,0 +1,17 @@
+// The NeoForge jars are a separate Gradle build, like forge/, so ModDevGradle never shares a classpath
+// with Fabric Loom or ForgeGradle. Run it from the MineMusic folder with:  .\gradlew.bat -p neoforge collectJars
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+    }
+}
+
+rootProject.name = 'MineMusic-NeoForge'
+
+// Each Minecraft version is its own subproject under neoforge/versions/<mc>.
+def mcVersions = ['26.1.2', '26.2', '26.3']
+mcVersions.each { mc ->
+    def name = 'neoforge' + mc.replace('.', '_')
+    include name
+    project(":${name}").projectDir = file("versions/${mc}")
+}

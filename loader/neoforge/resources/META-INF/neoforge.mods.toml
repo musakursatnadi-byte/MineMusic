@@ -1,0 +1,29 @@
+license="MIT"
+issueTrackerURL="https://github.com/musakursatnadi-byte/MineMusic/issues"
+
+[[mods]]
+modId="minemusic"
+version="${version}"
+displayName="MineMusic"
+displayURL="https://modrinth.com/mod/minemusic"
+# The icon is square, so it is an iconFile (NeoForge warns about the old logoFile at every start).
+iconFile="assets/minemusic/icon.png"
+authors="musakursatnadi"
+description='''Paste a YouTube link or type a song name in the pause menu and listen to it in the background while you play.'''
+
+[[mixins]]
+config="minemusic.client.mixins.json"
+
+[[dependencies.minemusic]]
+    modId="neoforge"
+    type="required"
+    versionRange="${neo_range}"
+    ordering="NONE"
+    side="CLIENT"
+
+[[dependencies.minemusic]]
+    modId="minecraft"
+    type="required"
+    versionRange="${minecraft_range}"
+    ordering="NONE"
+    side="CLIENT"

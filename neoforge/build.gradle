@@ -1,0 +1,108 @@
+plugins {
+    id 'net.neoforged.moddev' version '2.0.148' apply false
+}
+
+// The MineMusic folder: the shared code, the compat folders and the version number live there.
+def common = rootProject.file('..')
+def modVersion = new Properties().with { p ->
+    new File(common, 'gradle.properties').withInputStream { p.load(it) }
+    p.getProperty('mod_version')
+}
+
+subprojects {
+    apply plugin: 'java-library'
+    apply plugin: 'net.neoforged.moddev'
+
+    def mc = project.property('minecraft_version')
+    def javaVersion = project.property('java_version') as int
+
+    version = "${modVersion}+neoforge${mc}"
+    group = 'dev.minemusic'
+
+    base {
+        archivesName = 'minemusic'
+    }
+
+    java.toolchain.languageVersion = JavaLanguageVersion.of(javaVersion)
+
+    // -Pselftest=neoforge26_2 adds the automatic in-game test (devtest/) to that one version's dev run.
+    def selftest = rootProject.findProperty('selftest') == project.name
+
+    sourceSets {
+        main {
+            java.srcDirs = [new File(common, 'src/client/java'), new File(common, 'loader/neoforge/java')] +
+                    project.property('compat').split(',').collect { new File(common, "compat/${it.trim()}/java") } +
+                    (selftest ? [new File(common, 'devtest/java'),
+                                 new File(common, "devtest/compat/${project.property('testcompat')}/java")] : [])
+            resources.srcDirs = [
+                    new File(common, 'src/main/resources'),
+                    new File(common, 'src/client/resources'),
+                    new File(common, 'loader/neoforge/resources')
+            ]
+            resources.exclude 'fabric.mod.json'
+        }
+    }
+
+    neoForge {
+        version = project.property('neo_version')
+        runs {
+            client {
+                client()
+                gameDirectory = project.file('run')
+                if (selftest) {
+                    programArguments.addAll('--quickPlaySingleplayer', 'SelfTestWorld')
+                    def mode = rootProject.findProperty('selftestmode')
+                    if (mode) {
+                        jvmArguments.add("-Dminemusic.selftest=${mode}")
+                    }
+                    def home = rootProject.findProperty('selftesthome')
+                    if (home) {
+                        jvmArguments.add("-Dminemusic.home=${home}")
+                    }
+                }
+            }
+        }
+        mods {
+            minemusic {
+                sourceSet(sourceSets.main)
+            }
+        }
+    }
+
+    processResources {
+        def props = [
+                version        : project.version,
+                // Any NeoForge of this Minecraft version, not only the one the jar is built with.
+                neo_range      : project.property('neo_range'),
+                minecraft_range: project.property('minecraft_range'),
+                // Only used by the mixin config.
+                java_version   : project.property('mixin_java')
+        ]
+        inputs.properties props
+        filesMatching(['META-INF/neoforge.mods.toml', '*.mixins.json']) {
+            expand props
+        }
+    }
+
+    jar {
+        from(new File(common, 'LICENSE')) {
+            rename { 'LICENSE_minemusic' }
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.encoding = 'UTF-8'
+        options.release = javaVersion
+    }
+}
+
+// Copies every finished NeoForge jar into ../dist next to the Fabric and Forge jars.
+tasks.register('collectJars', Copy) {
+    subprojects.each { p ->
+        dependsOn p.tasks.named('build')
+        from(p.layout.buildDirectory.dir('libs')) {
+            include "minemusic-${p.version}.jar"
+        }
+    }
+    into new File(common, 'dist')
+}

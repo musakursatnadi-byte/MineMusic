@@ -6,6 +6,7 @@ A client-side mod for Minecraft Java Edition:
 
 - [Fabric](https://fabricmc.net/) (with Fabric API): 1.21.11, 26.1.x, 26.2 and 26.3
 - [Forge](https://files.minecraftforge.net/): 26.1.2, 26.2 and 26.3
+- [NeoForge](https://neoforged.net/): 26.1.2, 26.2 and 26.3
 
 - Download: [modrinth.com/mod/minemusic](https://modrinth.com/mod/minemusic)
 - License: [MIT](LICENSE). You may use, share and change it; keep the license and the author's name.
@@ -47,18 +48,21 @@ The Forge jars are a separate Gradle build in `forge/` (so ForgeGradle and Fabri
 ForgeGradle's tools also need a Java 8 JDK, which it downloads by itself; if that download fails, unpack a JDK 8 into
 `<GRADLE_USER_HOME>/caches/minecraftforge/forgegradle/mavenizer/caches/` and it is found there.
 
+The NeoForge jars are one more separate build in `neoforge/` (ModDevGradle):
+`.\gradlew.bat -p neoforge collectJars`, a dev game: `.\gradlew.bat -p neoforge :neoforge26_2:runClient`.
+
 There is an automatic in-game test (`devtest/`, only compiled with `-Pselftest=<project>`), for example
 `.\gradlew.bat :mc26_2:runClient -Pselftest=mc26_2 "--args=--quickPlaySingleplayer SelfTestWorld"`.
 It needs a single-player world called `SelfTestWorld` in `versions/<version>/run/saves/` (not included). `-Pselftesthome=<folder>` makes it use a copy of the MineMusic folder instead of your own.
 
 ## Project layout
 
-- `loader/fabric`, `loader/forge`: the entry point of each mod loader (it calls `MineMusicClient.init()` and `endTick()`); `loader/forge/resources` holds `mods.toml`.
+- `loader/fabric`, `loader/forge`, `loader/neoforge`: the entry point of each mod loader (it calls `MineMusicClient.init()` and `endTick()`); `loader/forge/resources` and `loader/neoforge/resources` hold their `mods.toml`.
 - `src/client/java`: the code shared by every Minecraft version and loader. `audio/` never touches Minecraft (playback, playlists, settings); `screen/` the menus; `hud/` the song name on screen; `keys/` shortcuts; `mixin/` the pause-menu button, muting Minecraft's music, and the boss-bar count.
 - `src/main/resources/assets/minemusic/lang`: the 36 language files (`en_us.json` is the base).
-- `compat/<folder>`: small version-specific pieces (`setscreen_*`, `keys_*`, `hud_*`; `keys_forge` and `hud_forge` are Forge's).
+- `compat/<folder>`: small version-specific pieces (`setscreen_*`, `keys_*`, `hud_*`; `*_forge` are Forge's, `*_neoforge` NeoForge's).
 - `versions/<version>/gradle.properties`: Minecraft, Java and Fabric API versions and the compat folders of each version.
-- `forge/versions/<version>/gradle.properties`: the same for the Forge jars (Forge version, Minecraft range, pack format).
+- `forge/versions/<version>/gradle.properties`, `neoforge/versions/<version>/gradle.properties`: the same for the Forge and NeoForge jars.
 - To add a Minecraft version: add it to `settings.gradle` and create `versions/<version>/gradle.properties`.
 
 ## Credits
@@ -71,7 +75,7 @@ Made by **musakursatnadi**: the idea, the features, the testing and the hand-dra
 
 **Minecraft oynarken kendi müziğini dinle.** **Esc**'ye bas, **MineMusic**'e tıkla, bir YouTube linki yapıştır ya da şarkının adını yaz, **Çal**'a bas. Sen oynarken müzik arka planda çalmaya devam eder.
 
-Minecraft Java Edition için, sadece istemci tarafında çalışan bir mod: **Fabric** (1.21.11, 26.1.x, 26.2, 26.3) ve **Forge** (26.1.2, 26.2, 26.3). İndirmek için: [modrinth.com/mod/minemusic](https://modrinth.com/mod/minemusic). Lisans: [MIT](LICENSE). Kullanabilir, paylaşabilir ve değiştirebilirsin; lisansı ve yapanın adını koruman yeter.
+Minecraft Java Edition için, sadece istemci tarafında çalışan bir mod: **Fabric** (1.21.11, 26.1.x, 26.2, 26.3), **Forge** ve **NeoForge** (26.1.2, 26.2, 26.3). İndirmek için: [modrinth.com/mod/minemusic](https://modrinth.com/mod/minemusic). Lisans: [MIT](LICENSE). Kullanabilir, paylaşabilir ve değiştirebilirsin; lisansı ve yapanın adını koruman yeter.
 
 - Esc menüsünde **MineMusic** butonu (ya da **F10**)
 - YouTube **linki** ya da **şarkı adı**: ilk sonuç hemen çalar, **Diğer sonuçlar** ilk 5 sonuçtan başkasını seçtirir

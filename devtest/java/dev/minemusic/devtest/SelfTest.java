@@ -64,7 +64,17 @@ public final class SelfTest {
             case "galeri-arama" -> GalleryTest::runSearch;
             default -> SelfTest::run;
         };
-        Thread thread = new Thread(test, "MineMusic-selftest");
+        Thread thread = new Thread(() -> {
+            // NeoForge builds the mods before Minecraft itself exists: wait for it first.
+            while (Minecraft.getInstance() == null) {
+                try {
+                    Thread.sleep(250);
+                } catch (InterruptedException e) {
+                    return;
+                }
+            }
+            test.run();
+        }, "MineMusic-selftest");
         thread.setDaemon(true);
         thread.start();
     }
@@ -465,9 +475,15 @@ public final class SelfTest {
 
     static void waitFor(String what, BooleanSupplier condition, int seconds) throws InterruptedException {
         long end = System.currentTimeMillis() + seconds * 1000L;
+        long nextNote = System.currentTimeMillis() + 30_000;
         while (!condition.getAsBoolean()) {
             if (System.currentTimeMillis() > end) {
-                throw new IllegalStateException("zaman aşımı: " + what);
+                throw new IllegalStateException("zaman aşımı: " + what + " (ekran: " + screenName() + ")");
+            }
+            if (System.currentTimeMillis() > nextNote) {
+                // Shows where a slow start is stuck (a loading screen, a question the game asks...).
+                log("  bekleniyor: " + what + ", ekran: " + screenName());
+                nextNote += 30_000;
             }
             Thread.sleep(250);
         }
@@ -492,5 +508,21 @@ public final class SelfTest {
 
     static void log(String message) {
         LOG.info("[SELFTEST] {}", message);
+    }
+
+    /** The class of the open screen and its title, for the log. */
+    private static String screenName() {
+        try {
+            return Minecraft.getInstance().submit(() -> {
+                Object screen = TestCompat.screen(Minecraft.getInstance());
+                if (screen == null) {
+                    return "yok";
+                }
+                String title = screen instanceof net.minecraft.client.gui.screens.Screen s ? s.getTitle().getString() : "";
+                return screen.getClass().getName() + " '" + title + "'";
+            }).get(5, TimeUnit.SECONDS);
+        } catch (Exception e) {
+            return "? (" + e + ")";
+        }
     }
 }
